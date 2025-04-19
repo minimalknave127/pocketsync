@@ -10,6 +10,8 @@ import {
   Inter_900Black,
 } from "@expo-google-fonts/inter";
 
+import { Toaster } from "sonner-native";
+
 import {
   Theme,
   ThemeProvider,
@@ -23,6 +25,7 @@ import { Platform } from "react-native";
 import { NAV_THEME } from "@/lib/constants";
 import { useColorScheme } from "@/lib/useColorScheme";
 import { SessionProvider } from "@/auth/auth";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -84,10 +87,13 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <SessionProvider>
-        <Slot />
-      </SessionProvider>
+      <GestureHandlerRootView className="flex-1">
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <SessionProvider>
+          <Slot />
+          <Toaster />
+        </SessionProvider>
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 }
