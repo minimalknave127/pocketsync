@@ -1,15 +1,25 @@
-import { useContext, createContext, type PropsWithChildren } from "react";
+import {
+  useContext,
+  createContext,
+  type PropsWithChildren,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 import { useStorageState } from "./useStorageState";
+import { authProvider } from "@/dbProvider";
 
 const AuthContext = createContext<{
   signIn: () => void;
   signOut: () => void;
-  session?: string | null;
+  signUp: (email: string, password: string) => Promise<any> | void;
+  user?: string | null;
   isLoading: boolean;
 }>({
   signIn: () => null,
   signOut: () => null,
-  session: null,
+  signUp: () => null,
+  user: null,
   isLoading: false,
 });
 
@@ -26,24 +36,49 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren) {
-  const [[isLoading, session], setSession] = useStorageState("session");
+  const [[isLoadingAccess, access], setAccess] = useStorageState("accessToken");
+  const [[isLoadingRefresh, refreshToken], setRefreshToken] =
+    useStorageState("refreshToken");
 
-  return (
-    <AuthContext.Provider
-      value={{
-        signIn: () => {
-          // Perform sign-in logic here
-          setSession("xxx");
-          console.log("signIn");
-        },
-        signOut: () => {
-          setSession(null);
-        },
-        session,
-        isLoading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const [user, setUser] = useState(null);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+  const isLoading = isLoadingAccess || isLoadingRefresh || isUserLoading;
+
+  // sign in
+  function signIn() {}
+
+  function signOut() {
+    setAccess(null);
+    setRefreshToken(null);
+  }
+
+  async function signUp(email: string, password: string) {
+    setIsUserLoading(true);
+    const res = await authProvider.signUp({ email, password });
+    const { accessToken, refreshToken } = res.data;
+    setAccess(accessToken);
+    setRefreshToken(refreshToken);
+    setUser({ email, id: res.data.user_id });
+    setIsUserLoading(false);
+  }
+
+  const vaules = useMemo(
+    () => ({
+      signIn,
+      signOut,
+      signUp,
+      user,
+      isLoading,
+    }),
+    [user, isLoading, signIn, signOut, signUp]
   );
+
+  useEffect(() => {
+    if (!access && !refreshToken && !isLoadingAccess && !isLoadingRefresh) {
+      setUser(null);
+      setIsUserLoading(false);
+    }
+  }, [isLoadingAccess, isLoadingRefresh]);
+
+  return <AuthContext.Provider value={vaules}>{children}</AuthContext.Provider>;
 }

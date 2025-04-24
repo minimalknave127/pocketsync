@@ -13,15 +13,7 @@ import { Text } from "@/components/ui/text";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { session, isLoading } = useSession();
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (!session) {
-    return <Redirect href="/(auth)/welcome-screen" />;
-  }
   return (
     <Tabs
       screenOptions={{

@@ -2,6 +2,7 @@ import { useSession } from "@/auth/auth";
 import { Button } from "@/components/ui/button";
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
+import { Link } from "expo-router";
 import { Image, SafeAreaView, View } from "react-native";
 
 export default function WelcomeScreen() {
@@ -23,9 +24,11 @@ export default function WelcomeScreen() {
         </SafeAreaView>
       </View>
       <View className="w-full rounded-t-xl -mt-10 gap-4 py-10 px-container bg-background">
-        <Button size="lg">
-          <Text>Registrovat se</Text>
-        </Button>
+        <Link href={"/sign-up"} asChild>
+          <Button size="lg">
+            <Text>Registrovat se</Text>
+          </Button>
+        </Link>
         <Button onPress={signIn} variant="secondary" size="lg">
           <Text>Přihlásit se</Text>
         </Button>

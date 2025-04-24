@@ -1,11 +1,35 @@
 import { useSession } from "@/auth/auth";
+import BackBtn from "@/components/nav/back-btn";
 import { Redirect, Stack } from "expo-router";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 export default function AuthLayout() {
-  const { session } = useSession();
-  if (session) {
+  const { user } = useSession();
+  if (user) {
     return <Redirect href="/(app)/(tabs)" />;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <KeyboardAvoidingView className="flex-1" behavior="padding">
+      <TouchableWithoutFeedback className="flex-1" onPress={Keyboard.dismiss}>
+        <Stack>
+          <Stack.Screen
+            name="welcome-screen"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="sign-up"
+            options={{
+              headerTitle: "",
+              headerLeft: () => <BackBtn />,
+            }}
+          />
+        </Stack>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
 }

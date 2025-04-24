@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import { StyleProp, ViewStyle } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleProp, ViewStyle, SafeAreaView, View } from "react-native";
 
 type ScreenProps = {
   children: React.ReactNode;
@@ -21,11 +20,9 @@ export const Screen: React.FC<ScreenProps> = ({
   className,
   edges = ["top", "bottom"],
 }) => (
-  <SafeAreaView
-    className={cn("bg-background py-4", className)}
-    style={[{ flex: 1 }, style]}
-    edges={edges}
-  >
-    {children}
+  <SafeAreaView style={[{ flex: 1 }, style]}>
+    <View className={cn("bg-background my-4 flex-1", className)}>
+      {children}
+    </View>
   </SafeAreaView>
 );

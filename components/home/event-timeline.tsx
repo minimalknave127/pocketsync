@@ -5,7 +5,7 @@ export default function EventTimeline() {
   return (
     <View>
       {Array.from({ length: 5 }).map((_, i) => (
-        <EventTimelineItem key={i} />
+        <EventTimelineItem length={5} index={i} key={i} />
       ))}
     </View>
   );

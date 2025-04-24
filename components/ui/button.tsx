@@ -1,11 +1,19 @@
-import { cva, type VariantProps } from "class-variance-authority";
+import {
+  ActivityIndicator,
+  Pressable,
+  Text,
+  View,
+  type PressableProps,
+} from "react-native";
 import * as React from "react";
-import { Pressable } from "react-native";
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { TextClassContext } from "@/components/ui/text";
 
+/* ---------- VARIANTS ---------- */
+
 const buttonVariants = cva(
-  "group flex items-center justify-center rounded-xl web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
+  "group flex flex-row items-center justify-center rounded-xl web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
@@ -25,10 +33,7 @@ const buttonVariants = cva(
         icon: "h-10 w-10",
       },
     },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
+    defaultVariants: { variant: "default", size: "default" },
   }
 );
 
@@ -52,41 +57,96 @@ const buttonTextVariants = cva(
         icon: "",
       },
     },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
+    defaultVariants: { variant: "default", size: "default" },
   }
 );
 
-type ButtonProps = React.ComponentPropsWithoutRef<typeof Pressable> &
-  VariantProps<typeof buttonVariants>;
+/* ---------- TYPES ---------- */
 
-const Button = React.forwardRef<
+type Variant = VariantProps<typeof buttonVariants>;
+export interface ButtonProps extends Omit<PressableProps, "children">, Variant {
+  /** Text or custom children inside the button */
+  children?: React.ReactNode;
+  /** React node rendered left of the text */
+  startIcon?: React.ReactNode;
+  /** React node rendered right of the text */
+  endIcon?: React.ReactNode;
+  /** When true, shows a spinner and disables interaction */
+  isLoading?: boolean;
+}
+
+/* ---------- COMPONENT ---------- */
+
+export const Button = React.forwardRef<
   React.ElementRef<typeof Pressable>,
   ButtonProps
->(({ className, variant, size, ...props }, ref) => {
-  return (
-    <TextClassContext.Provider
-      value={buttonTextVariants({
-        variant,
-        size,
-        className: "web:pointer-events-none",
-      })}
-    >
-      <Pressable
-        className={cn(
-          props.disabled && "opacity-50 web:pointer-events-none",
-          buttonVariants({ variant, size, className })
-        )}
-        ref={ref}
-        role="button"
-        {...props}
-      />
-    </TextClassContext.Provider>
-  );
-});
+>(
+  (
+    {
+      className,
+      variant,
+      size,
+      startIcon,
+      endIcon,
+      isLoading = false,
+      disabled,
+      children,
+      ...rest
+    },
+    ref
+  ) => {
+    const combinedDisabled = disabled || isLoading;
+
+    return (
+      <TextClassContext.Provider
+        value={buttonTextVariants({
+          variant,
+          size,
+          className: "web:pointer-events-none",
+        })}
+      >
+        <Pressable
+          ref={ref}
+          role="button"
+          disabled={combinedDisabled}
+          className={cn(
+            combinedDisabled && "opacity-50 web:pointer-events-none",
+            buttonVariants({ variant, size, className })
+          )}
+          {...rest}
+        >
+          {/* CONTENT WRAPPER */}
+          <View className="flex-row items-center">
+            {/* Start icon */}
+            {!isLoading && startIcon && (
+              <View className="mr-2">{startIcon}</View>
+            )}
+
+            {/* Spinner or text */}
+            {isLoading ? (
+              <ActivityIndicator
+                /* React Native automatically uses platform-specific spinner */
+                className="web:m-0"
+              />
+            ) : (
+              <Text
+                className={buttonTextVariants({ variant, size })}
+                numberOfLines={1}
+              >
+                {children}
+              </Text>
+            )}
+
+            {/* End icon */}
+            {!isLoading && endIcon && <View className="ml-2">{endIcon}</View>}
+          </View>
+        </Pressable>
+      </TextClassContext.Provider>
+    );
+  }
+);
 Button.displayName = "Button";
 
-export { Button, buttonTextVariants, buttonVariants };
-export type { ButtonProps };
+/* ---------- RE-EXPORTS ---------- */
+
+export { buttonVariants, buttonTextVariants };
