@@ -19,6 +19,7 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: "#26C195",
         headerShown: false,
+        headerShadowVisible: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
 
@@ -45,6 +46,7 @@ export default function TabLayout() {
         name="clients"
         options={{
           title: "Klienti",
+          headerShown: true,
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="person.fill" color={color} />
           ),

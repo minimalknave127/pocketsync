@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import { ViewStyle } from "react-native";
 import { Button } from "../ui/button";
 import { ArrowLeftIcon, XIcon } from "lucide-react-native";
+import { Icon } from "../icon";
 
 export default function BackBtn({
   style,
@@ -26,9 +27,13 @@ export default function BackBtn({
     >
       {/* <ChevronLeft color={PALETTE.common.black} /> */}
       {isModal ? (
-        <XIcon width={18} height={18} />
+        <Icon icon={XIcon} width={18} height={18} className="text-foreground" />
       ) : (
-        <ArrowLeftIcon style={{ width: 18, height: 18 }} />
+        <Icon
+          icon={ArrowLeftIcon}
+          style={{ width: 18, height: 18 }}
+          className="text-foreground"
+        />
       )}
     </Button>
   );

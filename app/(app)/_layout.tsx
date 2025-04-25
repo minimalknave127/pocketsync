@@ -12,7 +12,12 @@ export default function AppLayout() {
     return <Redirect href="/(auth)/welcome-screen" />;
   }
   return (
-    <Stack screenOptions={{}}>
+    <Stack
+      screenOptions={{
+        headerShadowVisible: false,
+        headerLeft: () => <BackBtn />,
+      }}
+    >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
         name="clients/new"
@@ -20,6 +25,31 @@ export default function AppLayout() {
           title: "Nový klient",
           presentation: "modal",
           headerRight: () => <BackBtn isModal />,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="clients/[id]/index"
+        options={{
+          title: "",
+        }}
+      />
+      <Stack.Screen
+        name="clients/[id]/goals/index"
+        options={{
+          title: "",
+          presentation: "modal",
+          headerRight: () => <BackBtn isModal />,
+          headerLeft: null,
+        }}
+      />
+      <Stack.Screen
+        name="clients/[id]/goals/edit/[goal]"
+        options={{
+          title: "",
+          presentation: "modal",
+          headerRight: () => <BackBtn isModal />,
+          headerLeft: null,
         }}
       />
     </Stack>

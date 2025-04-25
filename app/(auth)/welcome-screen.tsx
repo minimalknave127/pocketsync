@@ -1,13 +1,9 @@
-import { useSession } from "@/auth/auth";
 import { Button } from "@/components/ui/button";
-import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { Link } from "expo-router";
 import { Image, SafeAreaView, View } from "react-native";
 
 export default function WelcomeScreen() {
-  // temporary sign in without auth
-  const { signIn } = useSession();
   return (
     <View className="flex-1">
       <View className="bg-primary flex-1 pt-40">
@@ -29,9 +25,11 @@ export default function WelcomeScreen() {
             <Text>Registrovat se</Text>
           </Button>
         </Link>
-        <Button onPress={signIn} variant="secondary" size="lg">
-          <Text>Přihlásit se</Text>
-        </Button>
+        <Link href="/sign-in" asChild>
+          <Button variant="secondary" size="lg">
+            Přihlásit se
+          </Button>
+        </Link>
       </View>
     </View>
   );

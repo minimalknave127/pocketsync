@@ -6,7 +6,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../form";
-import { TextInputProps } from "react-native";
+import { TextInput, TextInputProps } from "react-native";
 import { Input, InputProps } from "../input";
 
 type RHFInputProps = {
@@ -17,7 +17,7 @@ type RHFInputProps = {
   description?: string;
 } & InputProps;
 
-export default function RHFInput({
+export default function RHFBigInput({
   name,
   label,
   required,
@@ -33,14 +33,7 @@ export default function RHFInput({
       name={name}
       render={({ field }) => (
         <FormItem className={className}>
-          {label && (
-            <FormLabel>
-              {label}
-              {/* {required && <Text className="text-destructive">*</Text>} */}
-            </FormLabel>
-          )}
-          {/* <FormControl> */}
-          <Input
+          <TextInput
             {...props}
             {...field}
             className={inputClassName}

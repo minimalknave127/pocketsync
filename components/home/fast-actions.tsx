@@ -25,7 +25,7 @@ export default function FastActions() {
         renderItem={({ item }) => (
           <Link asChild href="/clients/new">
             <Pressable className="items-center">
-              <View className="w-20 h-20 bg-slate-100 justify-center items-center rounded-xl">
+              <View className="w-20 h-20 bg-slate-100 dark:bg-muted justify-center items-center rounded-xl">
                 {<item.icon />}
               </View>
               <Text className="text-center text-xs mt-2">{item.name}</Text>

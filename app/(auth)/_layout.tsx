@@ -28,6 +28,13 @@ export default function AuthLayout() {
               headerLeft: () => <BackBtn />,
             }}
           />
+          <Stack.Screen
+            name="sign-in"
+            options={{
+              headerTitle: "",
+              headerLeft: () => <BackBtn />,
+            }}
+          />
         </Stack>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
