@@ -53,7 +53,10 @@ export default function ClientGoalsEdit() {
                     </Text>
                   </View>
                 </View>
-                <Link href={`/clients/${clientId}/goals/edit/1`} asChild>
+                <Link
+                  href={`/clients/${clientId}/goals/edit/1?nested=true`}
+                  asChild
+                >
                   <Button variant="ghost" size="icon">
                     <Icon
                       icon={Edit2Icon}
@@ -86,7 +89,9 @@ export default function ClientGoalsEdit() {
         keyExtractor={(e) => e.id}
       />
       <View className="px-container mt-4">
-        <Button>Přidat cíl</Button>
+        <Link href="/clients/[id]/goals/edit/new" asChild>
+          <Button>Přidat cíl</Button>
+        </Link>
       </View>
     </Screen>
   );

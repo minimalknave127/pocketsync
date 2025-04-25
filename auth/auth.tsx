@@ -43,8 +43,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoadingRefresh, refreshToken], setRefreshToken] =
     useStorageState("refreshToken");
 
-  const [user, setUser] = useState(null);
-  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [user, setUser] = useState("hello"); // should be null
+  const [isUserLoading, setIsUserLoading] = useState(false); // should be true
   const isLoading = isLoadingAccess || isLoadingRefresh || isUserLoading;
 
   // sign in
@@ -106,8 +106,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
     [user, isLoading, signIn, signOut, signUp]
   );
 
-  let x = 0;
   useEffect(() => {
+    return;
     if (isLoadingAccess && isLoadingRefresh) return;
     if (!access || !refreshToken) {
       console.log("access", access);
@@ -117,9 +117,9 @@ export function SessionProvider({ children }: PropsWithChildren) {
       return;
     }
     async function getMe() {
-      x++;
-      console.log("access", x, access);
-      console.log("refreshToken", x, refreshToken);
+      // x++;
+      // console.log("access", x, access);
+      // console.log("refreshToken", x, refreshToken);
       const res = await authProvider.getCurrentUser();
       if (res.status === 200) {
         setUser(res.data.data);

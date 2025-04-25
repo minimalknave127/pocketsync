@@ -9,6 +9,7 @@ import {
 
 export default function AuthLayout() {
   const { user } = useSession();
+
   if (user) {
     return <Redirect href="/(app)/(tabs)" />;
   }

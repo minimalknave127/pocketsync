@@ -26,15 +26,17 @@ export default function ClientDetailGoals() {
 
 export function GoalItem() {
   return (
-    <Pressable className="py-4 flex-row gap-4 justify-between active:bg-muted/20">
-      <View className="flex-row gap-4">
-        <Text className="text-2xl">🏋️</Text>
-        <View>
-          <Text className="font-medium mb-1">Zhubnout 10 kg</Text>
-          <Text className="text-sm text-muted-foreground">24.2.2025</Text>
+    <Link href="/clients/12/goals/edit/1" asChild>
+      <Pressable className="py-4 flex-row gap-4 justify-between active:bg-muted/20">
+        <View className="flex-row gap-4">
+          <Text className="text-2xl">🏋️</Text>
+          <View>
+            <Text className="font-medium mb-1">Zhubnout 10 kg</Text>
+            <Text className="text-sm text-muted-foreground">24.2.2025</Text>
+          </View>
         </View>
-      </View>
-      <Icon icon={ChevronRightIcon} className="text-muted-foreground/50" />
-    </Pressable>
+        <Icon icon={ChevronRightIcon} className="text-muted-foreground/50" />
+      </Pressable>
+    </Link>
   );
 }

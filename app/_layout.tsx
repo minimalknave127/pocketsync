@@ -35,6 +35,7 @@ import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { AppState, AppStateStatus, Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const queryClient = new QueryClient();
 
@@ -116,7 +117,9 @@ export default function RootLayout() {
         <GestureHandlerRootView className="flex-1">
           <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
           <SessionProvider>
-            <Slot />
+            <SafeAreaProvider>
+              <Slot />
+            </SafeAreaProvider>
             <Toaster />
           </SessionProvider>
         </GestureHandlerRootView>

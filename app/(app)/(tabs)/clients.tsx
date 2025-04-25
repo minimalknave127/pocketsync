@@ -9,6 +9,7 @@ import { SearchIcon } from "lucide-react-native";
 import { View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import ClientItem from "../clients/components/client-item";
+import { Link } from "expo-router";
 
 export default function ClientsTab() {
   const { data } = useInfiniteQuery({
@@ -32,6 +33,7 @@ export default function ClientsTab() {
           placeholder="Vyhledávání"
         />
       </View>
+      <Link href="/clients/12">Test</Link>
       <FlashList
         estimatedItemSize={80}
         className="flex-1"
