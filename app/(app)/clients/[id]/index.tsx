@@ -6,17 +6,25 @@ import { ScrollView, Text, View } from "react-native";
 import ClientDetailHeader from "./components/client-detail-header";
 import CardSeparator from "@/components/ui/card-separator";
 import ClientDetailGoals from "./components/client-detail-goals";
+import { tCustomerResponse } from "@/ts/users/users";
 
 export default function ClientDetail() {
   const { id } = useLocalSearchParams();
-  const { data } = useQuery({
-    queryKey: ["clients", id],
-    queryFn: () => clientProvider.getClient(id as string),
-  });
+  const { data, isLoading }: { data: tCustomerResponse; isLoading: boolean } =
+    useQuery({
+      queryKey: ["clients", id],
+      queryFn: async () => {
+        const res = await clientProvider.getClient(id as string);
+        return res?.data?.data;
+      },
+    });
+
+  if (isLoading) return null;
+
   return (
     <Screen>
       <ScrollView className="flex-1">
-        <ClientDetailHeader />
+        <ClientDetailHeader user={data} />
         <CardSeparator className="py-4" />
         <ClientDetailGoals />
         {/* <Text>{JSON.stringify(data)}</Text> */}

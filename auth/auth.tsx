@@ -43,8 +43,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoadingRefresh, refreshToken], setRefreshToken] =
     useStorageState("refreshToken");
 
-  const [user, setUser] = useState("hello"); // should be null
-  const [isUserLoading, setIsUserLoading] = useState(false); // should be true
+  const [user, setUser] = useState(null); // should be null
+  const [isUserLoading, setIsUserLoading] = useState(true); // should be true
   const isLoading = isLoadingAccess || isLoadingRefresh || isUserLoading;
 
   // sign in
@@ -107,7 +107,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
   );
 
   useEffect(() => {
-    return;
     if (isLoadingAccess && isLoadingRefresh) return;
     if (!access || !refreshToken) {
       console.log("access", access);

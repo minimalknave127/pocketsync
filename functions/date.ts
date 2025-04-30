@@ -21,3 +21,10 @@ export function timeToLocale(date: string) {
   });
   return d;
 }
+
+export function convertSeconds(seconds: number, convertTo: "m" | "h") {
+  // minutes
+  if (convertTo === "m") return Math.floor(seconds / 60);
+  // hours
+  if (convertTo === "h") return Math.floor(seconds / 3600);
+}

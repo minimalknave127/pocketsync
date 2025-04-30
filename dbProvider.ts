@@ -36,3 +36,30 @@ export const clientProvider = {
     return res;
   },
 };
+
+export const goalsProvider = {
+  getGoals: async () => {
+    const res = await axios.get("/targets");
+    return res;
+  },
+  getGoal: async (id: string) => {
+    const res = await axios.get(`/targets/${id}`);
+    return res;
+  },
+  create: async (data: any): Promise<string> => {
+    const res = await axios.post("/targets", data);
+    return res.data?.created_id;
+  },
+  update: async (id: string, data: any) => {
+    const res = await axios.patch(`/targets/${id}`, data);
+    return res;
+  },
+  updateOrder: async (data: any) => {
+    const res = await axios.patch("/targets", data);
+    return res;
+  },
+  delete: async (id: string) => {
+    const res = await axios.delete(`/targets/${id}`);
+    return res;
+  },
+};

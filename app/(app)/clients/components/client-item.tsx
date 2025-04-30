@@ -9,7 +9,7 @@ export default function ClientItem({ client }: { client: any }) {
       <Pressable className="flex-row items-start gap-4 px-container py-3 active:bg-muted/20">
         <Avatar alt="" className="w-14 h-14">
           <AvatarFallback>
-            <Text className="font-medium">TS</Text>
+            <Text className="font-medium capitalize">{client.username[0]}</Text>
           </AvatarFallback>
           <AvatarImage />
         </Avatar>

@@ -1,7 +1,9 @@
 import { useSession } from "@/auth/auth";
 import BackBtn from "@/components/nav/back-btn";
+import DeleteGoal from "@/components/stack/delete-goal";
 import { Text } from "@/components/ui/text";
 import { Redirect, Stack } from "expo-router";
+import { Trash2 } from "lucide-react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function AppLayout() {
@@ -47,9 +49,30 @@ export default function AppLayout() {
         />
         <Stack.Screen
           name="clients/[id]/goals/edit/[goal]"
-          options={{
+          options={({ route }) => ({
             title: "",
             presentation: "fullScreenModal",
+            headerLeft: () => <DeleteGoal route={route} />,
+            headerRight: () => <BackBtn isModal />,
+          })}
+        />
+        <Stack.Screen
+          name="services/index"
+          options={{
+            title: "Služby",
+          }}
+        />
+        <Stack.Screen
+          name="workouts/index"
+          options={{
+            title: "Cvičení",
+          }}
+        />
+        <Stack.Screen
+          name="workouts/[id]/index"
+          options={{
+            title: "",
+            presentation: "modal",
             headerRight: () => <BackBtn isModal />,
             headerLeft: null,
           }}

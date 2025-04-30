@@ -1,95 +1,72 @@
-import { Icon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
-import * as Haptics from "expo-haptics";
+import { goalsProvider } from "@/dbProvider";
+import { tGoalsRes } from "@/ts/goals";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
-import { Edit2Icon } from "lucide-react-native";
-import { useCallback } from "react";
-import { Platform, TouchableOpacity, View } from "react-native";
-import FlatList, {
-  OpacityDecorator,
-  RenderItemParams,
-  ScaleDecorator,
-  ShadowDecorator,
-} from "react-native-draggable-flatlist";
+import { ListRenderItemInfo, View } from "react-native";
+import ReorderableList, {
+  ReorderableListReorderEvent,
+  reorderItems,
+} from "react-native-reorderable-list";
+import GoalCard from "./goal-card";
 
 export default function ClientGoalsEdit() {
   const { id: clientId } = useLocalSearchParams();
 
-  const goals = [
-    {
-      id: "1",
-      title: "Zhubnout 5 kg",
-    },
-    {
-      id: "2",
-      title: "Vymrdat 10 kg",
-    },
-  ];
-  const renderItem = useCallback(
-    ({ item, drag, isActive }: RenderItemParams<any>) => {
-      return (
-        <ShadowDecorator>
-          <ScaleDecorator activeScale={1.02}>
-            <OpacityDecorator>
-              <TouchableOpacity
-                className="px-container flex-row items-center justify-between py-4 active:bg-muted/20"
-                activeOpacity={1}
-                onLongPress={() => {
-                  drag();
-                  if (Platform.OS === "ios") {
-                    Haptics.selectionAsync();
-                  }
-                }}
-                disabled={isActive}
-              >
-                <View className="flex-row gap-4">
-                  <Text className="text-2xl">🏋️</Text>
-                  <View>
-                    <Text className="font-medium mb-1">Zhubnout 10 kg</Text>
-                    <Text className="text-sm text-muted-foreground">
-                      24.2.2025
-                    </Text>
-                  </View>
-                </View>
-                <Link
-                  href={`/clients/${clientId}/goals/edit/1?nested=true`}
-                  asChild
-                >
-                  <Button variant="ghost" size="icon">
-                    <Icon
-                      icon={Edit2Icon}
-                      className="text-muted-foreground/50 w-4 h-4"
-                      width={16}
-                      height={16}
-                    />
-                  </Button>
-                </Link>
-              </TouchableOpacity>
-            </OpacityDecorator>
-          </ScaleDecorator>
-        </ShadowDecorator>
-      );
-    },
-    []
-  );
+  const queryClient = useQueryClient();
+  const { data: goals, isLoading }: { data: tGoalsRes[]; isLoading: boolean } =
+    useQuery({
+      queryKey: ["clients-goals", clientId],
+      queryFn: async () => {
+        const res = await goalsProvider.getGoals();
+        return res?.data?.data;
+      },
+      enabled: !!clientId,
+    });
+
+  const handleUpdateOrder = async ({
+    from,
+    to,
+  }: ReorderableListReorderEvent) => {
+    try {
+      // Reorder items
+      const newOrdered = reorderItems(goals, from, to).map((item, index) => ({
+        ...item,
+        order: index,
+      }));
+
+      // Update query data
+      queryClient.setQueryData(["clients-goals", clientId], newOrdered);
+
+      // Update DB
+      await goalsProvider.updateOrder(newOrdered);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const renderItem = ({ item }: ListRenderItemInfo<tGoalsRes>) => {
+    return <GoalCard clientId={clientId as string} item={item} />;
+  };
+
+  if (isLoading) {
+    return null;
+  }
+
   return (
     <Screen className="pt-0 mt-0 flex-1">
       <Text className="font-semibold text-xl px-container">Moje cíle</Text>
-      <FlatList
-        onDragEnd={({ data }) => console.log(data)}
+
+      <ReorderableList
         data={goals}
-        className="mt-4"
+        onReorder={(data) => handleUpdateOrder(data)}
         renderItem={renderItem}
-        style={{ flex: 1 }}
-        containerStyle={{
-          flex: 1,
-        }}
-        keyExtractor={(e) => e.id}
+        keyExtractor={(item) => item.id}
       />
       <View className="px-container mt-4">
-        <Link href="/clients/[id]/goals/edit/new" asChild>
+        <Link href={`/clients/${clientId}/goals/edit/new`} asChild>
           <Button>Přidat cíl</Button>
         </Link>
       </View>
