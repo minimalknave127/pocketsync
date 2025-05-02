@@ -3,7 +3,7 @@ import Signal1 from "@/assets/icons/signal-1";
 import Signal2 from "@/assets/icons/signal-2";
 import Signal3 from "@/assets/icons/signal-3";
 import { Icon } from "@/components/icon";
-import TextIconPill from "@/components/textIconPill";
+import TextIconPill from "@/components/TextIconPill";
 import { Text } from "@/components/ui/text";
 import { difficultyTypesData } from "@/lib/selectData";
 import { tWorkoutDifficultyType, tWorkoutsResponse } from "@/ts/workouts";

@@ -1,10 +1,12 @@
 import { useSession } from "@/auth/auth";
 import BackBtn from "@/components/nav/back-btn";
+import EditBtn from "@/components/nav/edit-btn";
 import DeleteGoal from "@/components/stack/delete-goal";
 import { Text } from "@/components/ui/text";
 import { Redirect, Stack } from "expo-router";
-import { Trash2 } from "lucide-react-native";
+import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import WorkoutOptions from "./workouts/components/workout-options";
 
 export default function AppLayout() {
   const { user, isLoading } = useSession();
@@ -63,6 +65,21 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
+          name="services/[id]/index"
+          options={({ route }) => ({
+            title: "",
+            headerLeft: () => <BackBtn />,
+            headerRight: () => <WorkoutOptions route={route} />,
+          })}
+        />
+        <Stack.Screen
+          name="services/[id]/options/index"
+          options={({ route }) => ({
+            title: "",
+            headerLeft: () => <BackBtn />,
+          })}
+        />
+        <Stack.Screen
           name="workouts/index"
           options={{
             title: "Cvičení",
@@ -70,12 +87,25 @@ export default function AppLayout() {
         />
         <Stack.Screen
           name="workouts/[id]/index"
+          options={({ route }) => ({
+            title: "",
+            headerLeft: () => <BackBtn />,
+            headerRight: () => <WorkoutOptions route={route} />,
+          })}
+        />
+        <Stack.Screen
+          name="workouts/[id]/edit/index"
           options={{
             title: "",
-            presentation: "modal",
-            headerRight: () => <BackBtn isModal />,
-            headerLeft: null,
+            // headerRight: () => <BackBtn />,
           }}
+        />
+        <Stack.Screen
+          name="workouts/[id]/steps/index"
+          options={({ route }) => ({
+            title: "",
+            headerLeft: () => <BackBtn />,
+          })}
         />
       </Stack>
     </SafeAreaProvider>

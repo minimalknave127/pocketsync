@@ -52,7 +52,7 @@ export default function ServicesPage() {
           data={services}
           ItemSeparatorComponent={() => <View className="h-0.5 bg-muted" />}
           renderItem={({ item }) => {
-            return <ServiceCard workout={item} />;
+            return <ServiceCard service={item} />;
           }}
         />
       </Screen>
