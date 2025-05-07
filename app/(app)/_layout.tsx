@@ -1,12 +1,10 @@
 import { useSession } from "@/auth/auth";
 import BackBtn from "@/components/nav/back-btn";
-import EditBtn from "@/components/nav/edit-btn";
 import DeleteGoal from "@/components/stack/delete-goal";
 import { Text } from "@/components/ui/text";
 import { Redirect, Stack } from "expo-router";
-import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import WorkoutOptions from "./workouts/components/workout-options";
+import WorkoutOptions from "./workouts/components/workout-steps";
 
 export default function AppLayout() {
   const { user, isLoading } = useSession();

@@ -1,48 +1,66 @@
 import { Icon } from "@/components/icon";
+import SkeletonBox from "@/components/skeletons/skeleton-box";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { Link } from "expo-router";
 import { Clock10 } from "lucide-react-native";
 import React from "react";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 
-export default function ExercisesCard() {
+const width = Dimensions.get("screen").width;
+
+export default function ExercisesCard({ loading }: { loading?: boolean }) {
   return (
     <View className="gap-7">
       <View className="flex flex-row items-center px-container justify-between">
-        <Text className="font-semibold text-base">Cviky</Text>
-        <Link href="/workouts/2/steps" asChild>
-          <Button variant="link" size="sm">
-            Upravit
-          </Button>
-        </Link>
+        {loading ? (
+          loaders.title
+        ) : (
+          <Text className="font-semibold text-base">Cviky</Text>
+        )}
+
+        {loading ? (
+          loaders.button
+        ) : (
+          <Link href="/workouts/2/steps" asChild>
+            <Button variant="link" size="sm">
+              Upravit
+            </Button>
+          </Link>
+        )}
       </View>
       <View className="gap-4">
-        <ExerciseCard
-          index={1}
-          title={"Rozcvička"}
-          subTitle={"60 min"}
-          description={
-            "Protahování horních a dolních končetin včetně menší silové zátěže"
-          }
-        />
-        <PauseCard />
-        <ExerciseCard
-          index={1}
-          title={"Rozcvička"}
-          subTitle={"60 min"}
-          description={
-            "Protahování horních a dolních končetin včetně menší silové zátěenze"
-          }
-        />
-        <ExerciseCard
-          index={1}
-          title={"Rozcvička"}
-          subTitle={"60 min"}
-          description={
-            "Protahování horních a dolních končetin včetně menší silové zátěže"
-          }
-        />
+        {loading ? (
+          loaders.steps
+        ) : (
+          <>
+            <ExerciseCard
+              index={1}
+              title={"Rozcvička"}
+              subTitle={"60 min"}
+              description={
+                "Protahování horních a dolních končetin včetně menší silové zátěže"
+              }
+            />
+            <PauseCard />
+            <ExerciseCard
+              index={1}
+              title={"Rozcvička"}
+              subTitle={"60 min"}
+              description={
+                "Protahování horních a dolních končetin včetně menší silové zátěenze"
+              }
+            />
+            <ExerciseCard
+              index={1}
+              title={"Rozcvička"}
+              subTitle={"60 min"}
+              description={
+                "Protahování horních a dolních končetin včetně menší silové zátěže"
+              }
+            />
+          </>
+        )}
       </View>
     </View>
   );
@@ -87,4 +105,16 @@ const PauseCard = () => {
       <View className="flex-1 h-[1px] bg-input" />
     </View>
   );
+};
+
+const loaders = {
+  title: <SkeletonBox w={width * 0.4} h={25} />,
+  button: <SkeletonBox w={width * 0.4} h={25} />,
+  steps: (
+    <View className="gap-2 px-container">
+      {[...Array(3)].map((_, i) => (
+        <SkeletonBox key={i} w={width * 0.9} h={70} />
+      ))}
+    </View>
+  ),
 };

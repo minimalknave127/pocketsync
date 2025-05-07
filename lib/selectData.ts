@@ -1,6 +1,6 @@
 // import { LanguagesTypes } from "@/ts/global";
 
-import { tWorkoutDifficultyType } from "@/ts/workouts";
+import { tWorkoutDifficultyType, tWorkoutStepType } from "@/ts/workouts";
 
 export const difficultyTypesSelect = (lang: "cs" | "en") => {
   const selectData = [
@@ -22,4 +22,24 @@ export const difficultyTypesData: Record<
   hard: { en: "Hard", cs: "Těžké" },
   medium: { en: "Medium", cs: "Střední" },
   easy: { en: "Easy", cs: "Lehké" },
+};
+
+export const wokrkoutStepTypesSelect = (lang: "cs" | "en") => {
+  const selectData = [
+    { value: "rest", label: { en: "Rest", cs: "Pauza" } },
+    { value: "exercise", label: { en: "Exercise", cs: "Cvik" } },
+  ];
+
+  return selectData.map((item) => ({
+    value: item.value,
+    label: item.label[lang],
+  }));
+};
+
+export const wokrkoutStepTypesData: Record<
+  tWorkoutStepType,
+  { en: string; cs: string }
+> = {
+  rest: { en: "Rest", cs: "Pauza" },
+  exercise: { en: "Exercise", cs: "Cvik" },
 };

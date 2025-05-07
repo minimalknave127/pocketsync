@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
-import { goalsProvider } from "@/dbProvider";
+import { goalsProvider, servicesProvider } from "@/dbProvider";
 import { tGoalsRes } from "@/ts/goals";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
@@ -22,7 +22,7 @@ export default function ServiceOptionsEdit() {
   }: { data: tGoalsRes[]; isLoading: boolean } = useQuery({
     queryKey: ["service-options", id],
     queryFn: async () => {
-      const res = await goalsProvider.getGoals();
+      const res = await servicesProvider.getService(id as string, true);
       return res?.data?.data;
     },
     enabled: !!id,
@@ -43,7 +43,7 @@ export default function ServiceOptionsEdit() {
       queryClient.setQueryData(["service-options", id], newOrdered);
 
       // Update DB
-      await goalsProvider.updateOrder(newOrdered);
+      await servicesProvider.updateOrder(newOrdered);
     } catch (error) {
       console.log("error", error);
     }

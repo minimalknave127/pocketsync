@@ -10,6 +10,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import WorkoutCard from "./components/workout-card";
 import { FlashList } from "@shopify/flash-list";
 import { tWorkoutsResponse } from "@/ts/workouts";
+import ServiceWorkoutSkeleton from "@/components/skeletons/service-workout-skeleton";
+import { useQuery } from "@tanstack/react-query";
+import { workoutsProvider } from "@/dbProvider";
 
 const workouts: tWorkoutsResponse[] = [
   {
@@ -33,6 +36,14 @@ const workouts: tWorkoutsResponse[] = [
 export default function WorkoutsPage() {
   const insets = useSafeAreaInsets();
 
+  const { data, isLoading } = useQuery({
+    queryFn: async () => {
+      const res = await workoutsProvider.getWorkouts();
+      return res?.data?.data;
+    },
+    queryKey: ["workouts"],
+  });
+
   return (
     <>
       <Screen>
@@ -45,16 +56,22 @@ export default function WorkoutsPage() {
             placeholder="Vyhledávání"
           />
         </View>
-        <FlashList
-          estimatedItemSize={80}
-          className="flex-1"
-          contentContainerClassName="mt-6"
-          data={workouts}
-          ItemSeparatorComponent={() => <View className="h-0.5 bg-muted" />}
-          renderItem={({ item }) => {
-            return <WorkoutCard workout={item} />;
-          }}
-        />
+        {isLoading ? (
+          <View className="px-container mt-4">
+            {[...Array(3)].map((_, index) => (
+              <ServiceWorkoutSkeleton key={index} />
+            ))}
+          </View>
+        ) : (
+          <FlashList
+            estimatedItemSize={80}
+            className="flex-1"
+            contentContainerClassName="mt-6"
+            data={workouts}
+            ItemSeparatorComponent={() => <View className="h-0.5 bg-muted" />}
+            renderItem={({ item }) => <WorkoutCard workout={item} />}
+          />
+        )}
       </Screen>
       <View
         className="absolute bottom-0 right-0 w-full flex items-center justify-center"

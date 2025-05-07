@@ -17,7 +17,7 @@ export interface tWorkoutStep {
   workout_id: string;
   order: number;
   duration: number;
-  type: string;
+  type: tWorkoutStepType;
 }
 
 export interface tCustomerWorkout {

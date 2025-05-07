@@ -3,7 +3,7 @@ import StatusPill from "@/components/StatusPill";
 import TextIconPill from "@/components/TextIconPill";
 
 import { Text } from "@/components/ui/text";
-import { tWorkoutsResponse } from "@/ts/workouts";
+import { tServiceResponse, tServicesResponse } from "@/ts/services";
 import { Link } from "expo-router";
 import { ChevronRight, Clock10, HandCoins } from "lucide-react-native";
 import React from "react";
@@ -12,7 +12,7 @@ import { Pressable, View } from "react-native";
 export default function ServiceCard({
   service,
 }: {
-  service: tWorkoutsResponse;
+  service: tServicesResponse;
 }) {
   return (
     <Link href={`/services/${service.id}`} asChild>

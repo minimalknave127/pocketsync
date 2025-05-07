@@ -8,9 +8,21 @@ import React from "react";
 import { Platform, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ExercisesCard from "../components/steps-card";
+import { useQuery } from "@tanstack/react-query";
+import { workoutsProvider } from "@/dbProvider";
+import { useLocalSearchParams } from "expo-router";
 
 export default function WorkoutDetails() {
   const insets = useSafeAreaInsets();
+  const { id } = useLocalSearchParams();
+
+  const { data, isLoading } = useQuery({
+    queryFn: async () => {
+      const res = await workoutsProvider.getWorkout(id as string);
+      return res?.data?.data;
+    },
+    queryKey: ["workouts", id],
+  });
 
   return (
     <Screen>
@@ -27,6 +39,7 @@ export default function WorkoutDetails() {
           <View className="mt-4 gap-6">
             {/* Header */}
             <DetailsHeader
+              loading={isLoading}
               title={"Kondice - zeny"}
               avatar="f"
               avatarFallback="K"
@@ -41,13 +54,14 @@ export default function WorkoutDetails() {
 
             {/* Description */}
             <TextCard
+              loading={isLoading}
               title="Popis"
               description="Kondiční trénink zaměření na zeny"
               separator
             />
 
             {/* Excercises */}
-            <ExercisesCard />
+            <ExercisesCard loading={isLoading} />
           </View>
         </ScrollView>
         <View className="px-container py-4">

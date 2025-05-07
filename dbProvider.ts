@@ -1,4 +1,6 @@
 import axios from "./axios";
+import { tNewServiceEntry } from "./ts/services";
+import { tNewWorkoutEntry } from "./ts/workouts";
 
 export const authProvider = {
   signUp: async (data: any) => {
@@ -60,6 +62,60 @@ export const goalsProvider = {
   },
   delete: async (id: string) => {
     const res = await axios.delete(`/targets/${id}`);
+    return res;
+  },
+};
+
+export const servicesProvider = {
+  getServices: async () => {
+    const res = await axios.get("/services");
+    return res;
+  },
+  getService: async (id: string, only_options: boolean = false) => {
+    const res = await axios.get(`/services/${id}?only_options=${only_options}`);
+    return res;
+  },
+  create: async (data: tNewServiceEntry): Promise<string> => {
+    const res = await axios.post("/services", data);
+    return res.data?.created_id;
+  },
+  update: async (id: string, data: any) => {
+    const res = await axios.patch(`/services/${id}`, data);
+    return res;
+  },
+  updateOrder: async (data: any) => {
+    const res = await axios.patch("/services", data);
+    return res;
+  },
+  delete: async (id: string) => {
+    const res = await axios.delete(`/services/${id}`);
+    return res;
+  },
+};
+
+export const workoutsProvider = {
+  getWorkouts: async () => {
+    const res = await axios.get("/workouts");
+    return res;
+  },
+  getWorkout: async (id: string, only_steps: boolean = false) => {
+    const res = await axios.get(`/workouts/${id}?only_steps=${only_steps}`);
+    return res;
+  },
+  create: async (data: tNewWorkoutEntry): Promise<string> => {
+    const res = await axios.post("/workouts", data);
+    return res.data?.created_id;
+  },
+  update: async (id: string, data: any) => {
+    const res = await axios.patch(`/workouts/${id}`, data);
+    return res;
+  },
+  updateOrder: async (data: any) => {
+    const res = await axios.patch("/workouts", data);
+    return res;
+  },
+  delete: async (id: string) => {
+    const res = await axios.delete(`/workouts/${id}`);
     return res;
   },
 };

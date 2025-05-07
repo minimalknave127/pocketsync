@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
-import { goalsProvider } from "@/dbProvider";
-import { tGoalsRes } from "@/ts/goals";
+import { workoutsProvider } from "@/dbProvider";
+import { tWorkoutStep } from "@/ts/workouts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocalSearchParams } from "expo-router";
 import { ListRenderItemInfo, View } from "react-native";
@@ -10,6 +10,7 @@ import ReorderableList, {
   ReorderableListReorderEvent,
   reorderItems,
 } from "react-native-reorderable-list";
+import WorkoutStep from "../../components/workout-step-card";
 
 export default function WorkoutStepsEdit() {
   const { id } = useLocalSearchParams();
@@ -18,10 +19,10 @@ export default function WorkoutStepsEdit() {
   const {
     data: options,
     isLoading,
-  }: { data: tGoalsRes[]; isLoading: boolean } = useQuery({
+  }: { data: tWorkoutStep[]; isLoading: boolean } = useQuery({
     queryKey: ["workout-steps", id],
     queryFn: async () => {
-      const res = await goalsProvider.getGoals();
+      const res = await workoutsProvider.getWorkout(id as string, true);
       return res?.data?.data;
     },
     enabled: !!id,
@@ -42,14 +43,14 @@ export default function WorkoutStepsEdit() {
       queryClient.setQueryData(["workout-steps", id], newOrdered);
 
       // Update DB
-      await goalsProvider.updateOrder(newOrdered);
+      await workoutsProvider.updateOrder(newOrdered);
     } catch (error) {
       console.log("error", error);
     }
   };
 
-  const renderItem = ({ item }: ListRenderItemInfo<tGoalsRes>) => {
-    return <View />; // TODO
+  const renderItem = ({ item }: ListRenderItemInfo<tWorkoutStep>) => {
+    return <WorkoutStep title={item.name} type={item.type} />;
   };
 
   if (isLoading) {
@@ -64,7 +65,7 @@ export default function WorkoutStepsEdit() {
         data={options}
         onReorder={(data) => handleUpdateOrder(data)}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
       />
       <View className="px-container mt-4">
         <Link href={`/services/${id}/edit`} asChild>

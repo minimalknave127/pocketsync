@@ -2,36 +2,46 @@ import { Icon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Screen } from "@/components/ui/screen";
-import { Text } from "@/components/ui/text";
+import { servicesProvider } from "@/dbProvider";
+import { tServicesResponse } from "@/ts/services";
+import { FlashList } from "@shopify/flash-list";
+import { useQuery } from "@tanstack/react-query";
 import { SearchIcon } from "lucide-react-native";
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ServiceCard from "./components/service-card";
-import { FlashList } from "@shopify/flash-list";
-import { tWorkoutsResponse } from "@/ts/workouts";
+import ServiceWorkoutSkeleton from "@/components/skeletons/service-workout-skeleton";
 
-const services: tWorkoutsResponse[] = [
+const services: tServicesResponse[] = [
   {
     id: "1",
     name: "Ramena",
-    difficulty: "easy",
-    total_duration: 600,
-    notes: "Horni koncetiny",
-    steps_count: 7,
+    description: "Opis sluzby",
+    duration: 600,
+    is_active: true,
+    price: 100,
   },
   {
     id: "2",
     name: "Nohy",
-    difficulty: "medium",
-    total_duration: 3600,
-    notes: "Kondicni trenink noh",
-    steps_count: 10,
+    description: "Opis sluzby",
+    duration: 3600,
+    is_active: true,
+    price: 100,
   },
 ];
 
 export default function ServicesPage() {
   const insets = useSafeAreaInsets();
+
+  const { data, isLoading } = useQuery({
+    queryFn: async () => {
+      const res = await servicesProvider.getServices();
+      return res?.data?.data;
+    },
+    queryKey: ["services"],
+  });
 
   return (
     <>
@@ -45,16 +55,24 @@ export default function ServicesPage() {
             placeholder="Vyhledávání"
           />
         </View>
-        <FlashList
-          estimatedItemSize={80}
-          className="flex-1"
-          contentContainerClassName="mt-6"
-          data={services}
-          ItemSeparatorComponent={() => <View className="h-0.5 bg-muted" />}
-          renderItem={({ item }) => {
-            return <ServiceCard service={item} />;
-          }}
-        />
+        {isLoading ? (
+          <View className="px-container mt-4">
+            {[...Array(3)].map((_, index) => (
+              <ServiceWorkoutSkeleton key={index} />
+            ))}
+          </View>
+        ) : (
+          <FlashList
+            estimatedItemSize={80}
+            className="flex-1"
+            contentContainerClassName="mt-6"
+            data={services}
+            ItemSeparatorComponent={() => <View className="h-0.5 bg-muted" />}
+            renderItem={({ item }) => {
+              return <ServiceCard service={item} />;
+            }}
+          />
+        )}
       </Screen>
       <View
         className="absolute bottom-0 right-0 w-full flex items-center justify-center"

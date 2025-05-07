@@ -10,9 +10,21 @@ import React from "react";
 import { Platform, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ServiceOptionsCard from "../components/service-options-card";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
+import { servicesProvider } from "@/dbProvider";
 
 export default function ServiceDetails() {
   const insets = useSafeAreaInsets();
+  const { id } = useLocalSearchParams();
+
+  const { data, isLoading } = useQuery({
+    queryFn: async () => {
+      const res = await servicesProvider.getService(id as string);
+      return res?.data?.data;
+    },
+    queryKey: ["services", id],
+  });
 
   return (
     <Screen>
@@ -29,6 +41,7 @@ export default function ServiceDetails() {
           <View className="mt-4 gap-6">
             {/* Header */}
             <DetailsHeader
+              loading={isLoading}
               title={
                 <View className="flex-row items-center gap-4">
                   <Text className="text-2xl font-semibold capitalize">
@@ -53,17 +66,15 @@ export default function ServiceDetails() {
 
             {/* Description */}
             <TextCard
+              loading={isLoading}
               title="Popis"
               description="Kondiční trénink zaměření na zeny"
               separator
             />
 
-            <ServiceOptionsCard />
+            <ServiceOptionsCard loading={isLoading} />
           </View>
         </ScrollView>
-        <View className="px-container py-4">
-          {/* <Button onPress={form.handleSubmit(handleSubmit)}>Uložit</Button> */}
-        </View>
       </View>
     </Screen>
   );
