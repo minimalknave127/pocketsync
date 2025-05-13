@@ -1,3 +1,4 @@
+import CreateEditHeaderFormCard from "@/components/cards/form/edit-header";
 import { Icon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import CardSeparator from "@/components/ui/card-separator";
@@ -83,16 +84,7 @@ export default function CreateEditWorkout() {
     >
       <ScrollView contentContainerClassName="flex-1" className="flex-1 ">
         <Form {...form}>
-          <View className="mt-4 flex flex-row gap-5 px-container ">
-            <View className="w-[70px] h-[70px] rounded-3xl bg-muted self-center flex items-center justify-center"></View>
-            <View className="flex-1">
-              <RHFInput
-                containerClassName="border-0 border-b mx-container"
-                name="name"
-                placeholder="Název cviku"
-              />
-            </View>
-          </View>
+          <CreateEditHeaderFormCard name="name" placeholder="Název cviku" />
           <CardSeparator className="py-4" />
           <View className="px-container gap-4">
             <RHFInput

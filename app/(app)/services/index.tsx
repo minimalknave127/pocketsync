@@ -12,6 +12,7 @@ import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ServiceCard from "./components/service-card";
 import ServiceWorkoutSkeleton from "@/components/skeletons/service-workout-skeleton";
+import { Link } from "expo-router";
 
 const services: tServicesResponse[] = [
   {
@@ -21,10 +22,12 @@ const services: tServicesResponse[] = [
     duration: 600,
     is_active: true,
     price: 100,
+    icon_emoji: "🏋️",
   },
   {
     id: "2",
     name: "Nohy",
+    icon_emoji: "🏋️",
     description: "Opis sluzby",
     duration: 3600,
     is_active: true,
@@ -35,14 +38,15 @@ const services: tServicesResponse[] = [
 export default function ServicesPage() {
   const insets = useSafeAreaInsets();
 
-  const { data, isLoading } = useQuery({
-    queryFn: async () => {
-      const res = await servicesProvider.getServices();
-      return res?.data?.data;
-    },
-    queryKey: ["services"],
-  });
-
+  const { data, isLoading }: { data: tServicesResponse[]; isLoading: boolean } =
+    useQuery({
+      queryFn: async () => {
+        const res = await servicesProvider.getServices();
+        return res?.data?.data;
+      },
+      queryKey: ["services"],
+    });
+  console.log("data", data);
   return (
     <>
       <Screen>
@@ -66,7 +70,7 @@ export default function ServicesPage() {
             estimatedItemSize={80}
             className="flex-1"
             contentContainerClassName="mt-6"
-            data={services}
+            data={data}
             ItemSeparatorComponent={() => <View className="h-0.5 bg-muted" />}
             renderItem={({ item }) => {
               return <ServiceCard service={item} />;
@@ -78,7 +82,9 @@ export default function ServicesPage() {
         className="absolute bottom-0 right-0 w-full flex items-center justify-center"
         style={{ paddingBottom: insets.bottom }}
       >
-        <Button className="rounded-full">Vyvořit službu</Button>
+        <Link href="/services/edit/new" asChild>
+          <Button className="rounded-full">Vyvořit službu</Button>
+        </Link>
       </View>
     </>
   );

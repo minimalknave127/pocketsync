@@ -11,6 +11,7 @@ import ReorderableList, {
   reorderItems,
 } from "react-native-reorderable-list";
 import ServiceOption from "../../components/service-option";
+import { tServiceOption } from "@/ts/services";
 
 export default function ServiceOptionsEdit() {
   const { id } = useLocalSearchParams();
@@ -19,7 +20,7 @@ export default function ServiceOptionsEdit() {
   const {
     data: options,
     isLoading,
-  }: { data: tGoalsRes[]; isLoading: boolean } = useQuery({
+  }: { data: tServiceOption[]; isLoading: boolean } = useQuery({
     queryKey: ["service-options", id],
     queryFn: async () => {
       const res = await servicesProvider.getService(id as string, true);
@@ -49,8 +50,14 @@ export default function ServiceOptionsEdit() {
     }
   };
 
-  const renderItem = ({ item }: ListRenderItemInfo<tGoalsRes>) => {
-    return <ServiceOption title={item.name} />;
+  const renderItem = ({ item }: ListRenderItemInfo<tServiceOption>) => {
+    return (
+      <ServiceOption
+        id={item.id}
+        title={item.name}
+        description={item.description}
+      />
+    );
   };
 
   if (isLoading) {

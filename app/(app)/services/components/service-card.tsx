@@ -20,14 +20,17 @@ export default function ServiceCard({
         <View className="flex flex-col gap-2">
           <View className="flex flex-col">
             <View className="flex flex-row gap-2">
-              <Text className="font-medium">Names</Text>
-              <StatusPill text={"Aktivni"} variant={"success"} />
+              <Text className="font-medium">{service.name}</Text>
+              <StatusPill
+                text={service.is_active ? "Aktivni" : "Neaktivni"}
+                variant={service.is_active ? "success" : "common"}
+              />
             </View>
-            <Text>Notes</Text>
+            <Text>{service.description}</Text>
           </View>
           <View className="flex flex-row gap-2.5">
-            <TextIconPill text={"1190 Kč"} icon={HandCoins} />
-            <TextIconPill text={`90 minut`} icon={Clock10} />
+            <TextIconPill text={`${service.price} Kč`} icon={HandCoins} />
+            <TextIconPill text={`${service.duration} minut`} icon={Clock10} />
           </View>
         </View>
 

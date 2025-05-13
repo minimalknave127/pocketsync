@@ -6,20 +6,28 @@ import { Link } from "expo-router";
 import { CheckIcon, Clock10 } from "lucide-react-native";
 import React from "react";
 import { Dimensions, View } from "react-native";
+import ServiceOptionPreview from "./service-option-preview";
+import { tServiceOption } from "@/ts/services";
 
 const { width } = Dimensions.get("window");
 
-export default function ServiceOptionsCard({ loading }: { loading?: boolean }) {
+export default function ServiceOptionsCard({
+  loading,
+  options,
+}: {
+  loading?: boolean;
+  options?: tServiceOption[];
+}) {
   return (
     <View className="gap-7">
       <View className="flex flex-row items-center px-container justify-between">
         {loading ? (
-          loaders.title
+          serviceOptionCardLoaders.title
         ) : (
           <Text className="font-semibold text-base">Obsah služby</Text>
         )}
         {loading ? (
-          loaders.button
+          serviceOptionCardLoaders.button
         ) : (
           <Link href="/services/2/options" asChild>
             <Button variant="link" size="sm">
@@ -29,7 +37,14 @@ export default function ServiceOptionsCard({ loading }: { loading?: boolean }) {
         )}
       </View>
       <View className="gap-4">
-        {loading ? loaders.options : <Option title={"Snížení hmotnosti"} />}
+        {loading
+          ? serviceOptionCardLoaders.options
+          : options?.map((option) => (
+              <ServiceOptionPreview
+                title={option.name}
+                description={option.description}
+              />
+            ))}
         {/* <Option title={"Zpevnění a tvarování postavy"} />
         <Option title={"Cvičení v těhotenství a po porodu"} /> */}
       </View>
@@ -37,16 +52,7 @@ export default function ServiceOptionsCard({ loading }: { loading?: boolean }) {
   );
 }
 
-const Option = ({ title }) => {
-  return (
-    <View className="flex flex-row gap-2 items-center px-container">
-      <Icon icon={CheckIcon} className="text-primary" width={18} height={18} />
-      <Text className="text-base w-full flex-wrap shrink">{title}</Text>
-    </View>
-  );
-};
-
-const loaders = {
+export const serviceOptionCardLoaders = {
   title: <SkeletonBox w={width * 0.4} h={25} />,
   button: <SkeletonBox w={width * 0.4} h={25} />,
   options: (

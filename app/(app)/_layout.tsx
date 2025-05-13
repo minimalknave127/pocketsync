@@ -5,6 +5,7 @@ import { Text } from "@/components/ui/text";
 import { Redirect, Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import WorkoutOptions from "./workouts/components/workout-steps";
+import ServiceHeaderRightBtn from "./services/components/service-header-right-btn";
 
 export default function AppLayout() {
   const { user, isLoading } = useSession();
@@ -67,7 +68,7 @@ export default function AppLayout() {
           options={({ route }) => ({
             title: "",
             headerLeft: () => <BackBtn />,
-            headerRight: () => <WorkoutOptions route={route} />,
+            headerRight: () => <ServiceHeaderRightBtn route={route} />,
           })}
         />
         <Stack.Screen
@@ -103,6 +104,22 @@ export default function AppLayout() {
           options={({ route }) => ({
             title: "",
             headerLeft: () => <BackBtn />,
+          })}
+        />
+        <Stack.Screen
+          name="services/edit/[id]/index"
+          options={({ route }) => ({
+            title: "",
+            headerLeft: () => <BackBtn />,
+          })}
+        />
+        <Stack.Screen
+          name="services/edit/[id]/options/index"
+          options={({ route }) => ({
+            title: "",
+            presentation: "modal",
+            headerLeft: () => null,
+            headerRight: () => <BackBtn isModal />,
           })}
         />
       </Stack>

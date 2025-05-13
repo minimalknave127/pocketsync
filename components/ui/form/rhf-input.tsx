@@ -6,7 +6,6 @@ import {
   FormLabel,
   FormMessage,
 } from "../form";
-import { TextInputProps } from "react-native";
 import { Input, InputProps } from "../input";
 
 type RHFInputProps = {
@@ -24,16 +23,18 @@ export default function RHFInput({
   className,
   inputClassName,
   description,
+  // variant = "default",
   ...props
 }: RHFInputProps) {
   const { control } = useFormContext();
+
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => (
         <FormItem className={className}>
-          {label && (
+          {label && props.variant === "default" && (
             <FormLabel>
               {label}
               {/* {required && <Text className="text-destructive">*</Text>} */}
@@ -43,6 +44,7 @@ export default function RHFInput({
           <Input
             {...props}
             {...field}
+            label={props.variant === "insetLabel" ? label : undefined}
             className={inputClassName}
             onChangeText={field.onChange}
           />

@@ -4,12 +4,20 @@ import { Dimensions, View } from "react-native";
 import { Text } from "../ui/text";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import SkeletonBox from "../skeletons/skeleton-box";
+import { Link, RelativePathString } from "expo-router";
+import { Button } from "../ui/button";
 
 interface TextCardProps {
   title: string;
   description: string;
   separator?: boolean;
   loading?: boolean;
+  action?: {
+    type: "button" | "link";
+    href?: RelativePathString;
+    text: string;
+    onPress?: () => void;
+  };
 }
 
 const { width } = Dimensions.get("screen");
@@ -19,6 +27,7 @@ export default function TextCard({
   description,
   separator = false,
   loading = false,
+  action,
 }: TextCardProps) {
   return (
     <>
@@ -30,7 +39,23 @@ export default function TextCard({
           </>
         ) : (
           <>
-            <Text className="text-base font-semibold capitalize">{title}</Text>
+            <View className="flex-row items-center justify-between">
+              <Text className="text-base font-semibold capitalize">
+                {title}
+              </Text>
+              {action &&
+                (action.type === "button" ? (
+                  <Button variant="link" size="sm" onPress={action.onPress}>
+                    {action.text}
+                  </Button>
+                ) : (
+                  <Link href={action?.href} asChild>
+                    <Button size="sm" variant="link">
+                      {action.text}
+                    </Button>
+                  </Link>
+                ))}
+            </View>
             <Text className="text-base mt-2.5">{description}</Text>
           </>
         )}

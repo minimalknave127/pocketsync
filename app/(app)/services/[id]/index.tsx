@@ -5,7 +5,7 @@ import StatusPill from "@/components/StatusPill";
 import TextIconPill from "@/components/TextIconPill";
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
-import { Clock10 } from "lucide-react-native";
+import { Clock10, HandCoins } from "lucide-react-native";
 import React from "react";
 import { Platform, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -13,18 +13,20 @@ import ServiceOptionsCard from "../components/service-options-card";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { servicesProvider } from "@/dbProvider";
+import { tServiceResponse } from "@/ts/services";
 
 export default function ServiceDetails() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams();
 
-  const { data, isLoading } = useQuery({
-    queryFn: async () => {
-      const res = await servicesProvider.getService(id as string);
-      return res?.data?.data;
-    },
-    queryKey: ["services", id],
-  });
+  const { data, isLoading }: { data: tServiceResponse; isLoading: boolean } =
+    useQuery({
+      queryFn: async () => {
+        const res = await servicesProvider.getService(id as string);
+        return res?.data?.data;
+      },
+      queryKey: ["services", id],
+    });
 
   return (
     <Screen>
@@ -45,20 +47,26 @@ export default function ServiceDetails() {
               title={
                 <View className="flex-row items-center gap-4">
                   <Text className="text-2xl font-semibold capitalize">
-                    Hubnutí
+                    {data?.name}
                   </Text>
-                  <StatusPill text="Aktivní" variant="success" />
+                  <StatusPill
+                    text={data?.is_active ? "Aktivni" : "Neaktivni"}
+                    variant={data?.is_active ? "success" : "common"}
+                  />
                 </View>
               }
-              icon="🎧"
+              icon={data?.icon_emoji}
               classNames={{
                 iconWrapper: "bg-transparent",
                 textIcon: "text-6xl",
               }}
               descripton={
                 <>
-                  <TextIconPill icon={Clock10} text={"60 minut"} />
-                  <TextIconPill icon={<DumbbellHand />} text={"20 cviků"} />
+                  <TextIconPill
+                    icon={Clock10}
+                    text={`${data?.duration} minut`}
+                  />
+                  <TextIconPill icon={HandCoins} text={`${data?.price} Kč`} />
                 </>
               }
               separator
@@ -68,11 +76,11 @@ export default function ServiceDetails() {
             <TextCard
               loading={isLoading}
               title="Popis"
-              description="Kondiční trénink zaměření na zeny"
+              description={data?.description}
               separator
             />
 
-            <ServiceOptionsCard loading={isLoading} />
+            <ServiceOptionsCard loading={isLoading} options={data?.options} />
           </View>
         </ScrollView>
       </View>
