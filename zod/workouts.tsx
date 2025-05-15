@@ -1,11 +1,11 @@
 import z from "zod";
 
-export const workoutDifficultyType = z.enum(["hard", "medium", "easy"]);
+export const sWorkoutDifficultyType = z.enum(["hard", "medium", "easy"]);
 
-export const newWorkoutSchema = z.object({
+export const sNewWorkoutSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
-  difficulty: workoutDifficultyType,
+  difficulty: sWorkoutDifficultyType,
   steps: z.array(
     z.object({
       name: z.string().min(1, "Step name is required"),

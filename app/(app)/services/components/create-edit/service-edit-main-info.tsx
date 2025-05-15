@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import RHFInput from "@/components/ui/form/rhf-input";
 import { Text } from "@/components/ui/text";
 import React, { useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { Dimensions, View } from "react-native";
 
 const width = Dimensions.get("screen").width;
@@ -12,7 +13,9 @@ export default function ServiceEditMainInfo({
 }: {
   loading: boolean;
 }) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const form = useFormContext();
+  console.log("FORM VALUES", form.getValues());
   return (
     <View className="px-container gap-3">
       {loading ? (

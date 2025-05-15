@@ -11,9 +11,11 @@ import { useIsActive, useReorderableDrag } from "react-native-reorderable-list";
 export default function WorkoutStep({
   title,
   type,
+  isPause,
 }: {
   title: string;
   type: tWorkoutStepType;
+  isPause?: boolean;
 }) {
   const drag = useReorderableDrag();
   const isActive = useIsActive();

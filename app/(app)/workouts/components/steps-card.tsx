@@ -9,7 +9,13 @@ import { Dimensions, View } from "react-native";
 
 const width = Dimensions.get("screen").width;
 
-export default function ExercisesCard({ loading }: { loading?: boolean }) {
+export default function WorkoutStepsCard({
+  loading,
+  isEdit,
+}: {
+  loading?: boolean;
+  isEdit?: boolean;
+}) {
   return (
     <View className="gap-7">
       <View className="flex flex-row items-center px-container justify-between">
@@ -22,7 +28,10 @@ export default function ExercisesCard({ loading }: { loading?: boolean }) {
         {loading ? (
           loaders.button
         ) : (
-          <Link href="/workouts/2/steps" asChild>
+          <Link
+            href={isEdit ? "/workouts/edit/new/steps" : "/workouts/2/steps"}
+            asChild
+          >
             <Button variant="link" size="sm">
               Upravit
             </Button>

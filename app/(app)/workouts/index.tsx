@@ -13,6 +13,7 @@ import { tWorkoutsResponse } from "@/ts/workouts";
 import ServiceWorkoutSkeleton from "@/components/skeletons/service-workout-skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { workoutsProvider } from "@/dbProvider";
+import { Link } from "expo-router";
 
 const workouts: tWorkoutsResponse[] = [
   {
@@ -77,7 +78,9 @@ export default function WorkoutsPage() {
         className="absolute bottom-0 right-0 w-full flex items-center justify-center"
         style={{ paddingBottom: insets.bottom }}
       >
-        <Button className="rounded-full">Vyvořit cvik</Button>
+        <Link href="/workouts/edit/new" asChild>
+          <Button className="rounded-full">Vyvořit cvik</Button>
+        </Link>
       </View>
     </>
   );

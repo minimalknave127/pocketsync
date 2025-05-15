@@ -5,7 +5,7 @@ import { TrueSheet } from "@lodev09/react-native-true-sheet";
 import React, { RefObject } from "react";
 import { View } from "react-native";
 
-export default function ServiceEditDescriptionSheet({
+export default function EditDescriptionSheet({
   sheetRef,
   dismiss,
 }: {

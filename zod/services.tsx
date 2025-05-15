@@ -18,7 +18,7 @@ export const sNewServiceSchema = z.object({
     .min(1, "Description is required")
     .max(255, "Maximální délka je 255 znaků"),
   icon_emoji: z.string().min(1, "Icon is required"),
-  price: z.coerce.number(),
-  duration: z.coerce.number(),
+  price: z.string().min(1, "Price is required"),
+  duration: z.string().min(1, "Duration is required"),
   options: z.array(sServiceOptionSchema),
 });
