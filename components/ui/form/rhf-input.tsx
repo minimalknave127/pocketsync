@@ -34,17 +34,11 @@ export default function RHFInput({
       name={name}
       render={({ field }) => (
         <FormItem className={className}>
-          {label && props.variant === "default" && (
-            <FormLabel>
-              {label}
-              {/* {required && <Text className="text-destructive">*</Text>} */}
-            </FormLabel>
-          )}
           {/* <FormControl> */}
           <Input
             {...props}
             {...field}
-            label={props.variant === "insetLabel" ? label : undefined}
+            label={label}
             className={inputClassName}
             onChangeText={field.onChange}
           />

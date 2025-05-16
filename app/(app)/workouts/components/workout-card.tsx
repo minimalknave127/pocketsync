@@ -28,7 +28,7 @@ export default function WorkoutCard({
           <View className="flex flex-col gap-2">
             <View className="flex flex-col">
               <Text className="font-medium">{workout.name}</Text>
-              <Text>{workout.notes}</Text>
+              <Text>{workout.description}</Text>
             </View>
             <View className="flex flex-row gap-2.5">
               <TextIconPill

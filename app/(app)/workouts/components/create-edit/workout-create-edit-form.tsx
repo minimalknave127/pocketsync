@@ -43,7 +43,7 @@ export default function WorkoutCreateEditForm({
   const form = useForm({
     defaultValues: {
       name: workout?.name || "",
-      description: workout?.notes || "",
+      description: workout?.description || "",
       steps: workout?.steps || [],
     },
     resolver: zodResolver(sNewWorkoutSchema),

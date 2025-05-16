@@ -21,7 +21,7 @@ const workouts: tWorkoutsResponse[] = [
     name: "Ramena",
     difficulty: "easy",
     total_duration: 600,
-    notes: "Horni koncetiny",
+    description: "Horni koncetiny",
     steps_count: 7,
   },
   {
@@ -29,7 +29,7 @@ const workouts: tWorkoutsResponse[] = [
     name: "Nohy",
     difficulty: "medium",
     total_duration: 3600,
-    notes: "Kondicni trenink noh",
+    description: "Kondicni trenink noh",
     steps_count: 10,
   },
 ];

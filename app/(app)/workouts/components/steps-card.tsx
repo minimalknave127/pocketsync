@@ -2,6 +2,7 @@ import { Icon } from "@/components/icon";
 import SkeletonBox from "@/components/skeletons/skeleton-box";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { useWorkoutStore } from "@/stores/workout";
 import { Link } from "expo-router";
 import { Clock10 } from "lucide-react-native";
 import React from "react";
@@ -16,6 +17,8 @@ export default function WorkoutStepsCard({
   loading?: boolean;
   isEdit?: boolean;
 }) {
+  const workoutSteps = useWorkoutStore((state) => state.steps);
+
   return (
     <View className="gap-7">
       <View className="flex flex-row items-center px-container justify-between">
@@ -39,37 +42,25 @@ export default function WorkoutStepsCard({
         )}
       </View>
       <View className="gap-4">
-        {loading ? (
-          loaders.steps
-        ) : (
-          <>
-            <ExerciseCard
-              index={1}
-              title={"Rozcvička"}
-              subTitle={"60 min"}
-              description={
-                "Protahování horních a dolních končetin včetně menší silové zátěže"
-              }
-            />
-            <PauseCard />
-            <ExerciseCard
-              index={1}
-              title={"Rozcvička"}
-              subTitle={"60 min"}
-              description={
-                "Protahování horních a dolních končetin včetně menší silové zátěenze"
-              }
-            />
-            <ExerciseCard
-              index={1}
-              title={"Rozcvička"}
-              subTitle={"60 min"}
-              description={
-                "Protahování horních a dolních končetin včetně menší silové zátěže"
-              }
-            />
-          </>
-        )}
+        {loading
+          ? loaders.steps
+          : workoutSteps.map((step, index) =>
+              step.type === "rest" ? (
+                <PauseCard key={step.id} duration={step.duration} />
+              ) : (
+                <ExerciseCard
+                  key={step.id}
+                  index={index + 1}
+                  title={step.name}
+                  subTitle={
+                    step.exerciseType === "time"
+                      ? `${step.duration} s`
+                      : `${step.repeatCount} x ${step.exerciseDuration}`
+                  }
+                  description={step.description}
+                />
+              )
+            )}
       </View>
     </View>
   );
@@ -95,7 +86,7 @@ const ExerciseCard = ({ title, subTitle, description, index }) => {
   );
 };
 
-const PauseCard = () => {
+const PauseCard = ({ duration }: { duration: number }) => {
   return (
     <View className="flex-row justify-center items-center gap-2">
       <View className="flex-1 h-[1px]  bg-input" />
@@ -108,7 +99,7 @@ const PauseCard = () => {
         />
         <View className="flex-row">
           <Text className="text-xs text-[#1E293B]/70">Přestávka</Text>
-          <Text className="text-xs text-[#1E293B]"> 2 min</Text>
+          <Text className="text-xs text-[#1E293B]"> {duration} s</Text>
         </View>
       </View>
       <View className="flex-1 h-[1px] bg-input" />

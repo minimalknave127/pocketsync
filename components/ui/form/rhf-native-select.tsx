@@ -36,22 +36,17 @@ export default function RHFNativeSelect({
       name={name}
       render={({ field }) => (
         <FormItem className={className}>
-          {label && (
-            <FormLabel>
-              {label}
-              {/* {required && <Text className="text-destructive">*</Text>} */}
-            </FormLabel>
-          )}
           {/* <FormControl> */}
           <NativeSelect
             options={options}
             onValueChange={field.onChange}
             selectedValue={field.value}
           >
-            <View pointerEvents="none">
+            <View pointerEvents="none" className="mt-4">
               <Input
                 {...props}
                 {...field}
+                label={label}
                 className={inputClassName}
                 value={
                   options?.find((option) => option.value === field.value)?.label
