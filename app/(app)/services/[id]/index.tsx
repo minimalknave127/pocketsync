@@ -1,19 +1,18 @@
-import DumbbellHand from "@/assets/icons/dumbell-hand";
 import DetailsHeader from "@/components/cards/details-header";
 import TextCard from "@/components/cards/text-card";
 import StatusPill from "@/components/StatusPill";
 import TextIconPill from "@/components/TextIconPill";
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
+import { servicesProvider } from "@/dbProvider";
+import { tServiceResponse } from "@/ts/services";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
 import { Clock10, HandCoins } from "lucide-react-native";
 import React from "react";
 import { Platform, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ServiceOptionsCard from "../components/service-options-card";
-import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
-import { servicesProvider } from "@/dbProvider";
-import { tServiceResponse } from "@/ts/services";
 
 export default function ServiceDetails() {
   const insets = useSafeAreaInsets();
@@ -80,7 +79,11 @@ export default function ServiceDetails() {
               separator
             />
 
-            <ServiceOptionsCard loading={isLoading} options={data?.options} />
+            <ServiceOptionsCard
+              loading={isLoading}
+              options={data?.options}
+              id={id as string}
+            />
           </View>
         </ScrollView>
       </View>

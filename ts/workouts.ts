@@ -4,6 +4,7 @@ export type tWorkoutStepExcerciseType = "count" | "time";
 export interface tWorkout {
   id: string;
   description?: string | null;
+  icon_emoji: string;
   trainer_id: string;
   name: string;
   difficulty: tWorkoutDifficultyType;
@@ -12,16 +13,16 @@ export interface tWorkout {
 
 export interface tWorkoutStep {
   id: number;
-  name: string;
+  name?: string | null;
   description?: string | null;
   workout_id: string;
   order: number;
   duration?: number;
   type: tWorkoutStepType;
-  restTime?: number;
-  repeatCount?: number;
-  exerciseDuration?: number;
-  exerciseType?: tWorkoutStepExcerciseType;
+  rest_time?: number | null;
+  repeat_count?: number | null;
+  exercise_duration?: number | null;
+  exercise_type?: tWorkoutStepExcerciseType | null;
 }
 
 export interface tCustomerWorkout {

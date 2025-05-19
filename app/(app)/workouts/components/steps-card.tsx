@@ -3,6 +3,7 @@ import SkeletonBox from "@/components/skeletons/skeleton-box";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useWorkoutStore } from "@/stores/workout";
+import { tWorkoutResponse } from "@/ts/workouts";
 import { Link } from "expo-router";
 import { Clock10 } from "lucide-react-native";
 import React from "react";
@@ -13,11 +14,15 @@ const width = Dimensions.get("screen").width;
 export default function WorkoutStepsCard({
   loading,
   isEdit,
+  steps,
+  id,
 }: {
   loading?: boolean;
   isEdit?: boolean;
+  steps?: tWorkoutResponse["steps"];
+  id?: tWorkoutResponse["id"];
 }) {
-  const workoutSteps = useWorkoutStore((state) => state.steps);
+  const workoutSteps = steps || useWorkoutStore((state) => state.steps);
 
   return (
     <View className="gap-7">
@@ -32,7 +37,7 @@ export default function WorkoutStepsCard({
           loaders.button
         ) : (
           <Link
-            href={isEdit ? "/workouts/edit/new/steps" : "/workouts/2/steps"}
+            href={isEdit ? "/workouts/edit/new/steps" : `/workouts/${id}/steps`}
             asChild
           >
             <Button variant="link" size="sm">
@@ -53,9 +58,9 @@ export default function WorkoutStepsCard({
                   index={index + 1}
                   title={step.name}
                   subTitle={
-                    step.exerciseType === "time"
+                    step.exercise_type === "time"
                       ? `${step.duration} s`
-                      : `${step.repeatCount} x ${step.exerciseDuration}`
+                      : `${step.repeat_count} x ${step.exercise_duration}`
                   }
                   description={step.description}
                 />

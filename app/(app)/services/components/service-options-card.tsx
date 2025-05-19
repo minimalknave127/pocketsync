@@ -7,16 +7,18 @@ import { CheckIcon, Clock10 } from "lucide-react-native";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import ServiceOptionPreview from "./service-option-preview";
-import { tServiceOption } from "@/ts/services";
+import { tService, tServiceOption } from "@/ts/services";
 
 const { width } = Dimensions.get("window");
 
 export default function ServiceOptionsCard({
   loading,
   options,
+  id,
 }: {
   loading?: boolean;
   options?: tServiceOption[];
+  id: tService["id"];
 }) {
   return (
     <View className="gap-7">
@@ -29,7 +31,7 @@ export default function ServiceOptionsCard({
         {loading ? (
           serviceOptionCardLoaders.button
         ) : (
-          <Link href="/services/2/options" asChild>
+          <Link href={`/services/${id}/options`} asChild>
             <Button variant="link" size="sm">
               Upravit
             </Button>

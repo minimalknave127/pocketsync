@@ -107,6 +107,20 @@ export default function AppLayout() {
           })}
         />
         <Stack.Screen
+          name="workouts/edit/[id]/index"
+          options={({ route }) => ({
+            title: "",
+            headerLeft: () => <BackBtn />,
+          })}
+        />
+        <Stack.Screen
+          name="workouts/edit/[id]/steps/index"
+          options={({ route }) => ({
+            title: "",
+            headerLeft: () => <BackBtn />,
+          })}
+        />
+        <Stack.Screen
           name="services/edit/[id]/index"
           options={({ route }) => ({
             title: "",

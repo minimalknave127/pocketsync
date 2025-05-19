@@ -20,7 +20,7 @@ export default function WorkoutOptions({
   const router = useRouter();
   function handlePress(value: string) {
     if (value === "edit") {
-      router.push(`/workouts/${route.params.id}/edit`);
+      router.push(`/workouts/edit/${route.params.id}`);
     }
 
     if (value === "delete") {

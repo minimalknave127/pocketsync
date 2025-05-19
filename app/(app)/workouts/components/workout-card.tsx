@@ -21,10 +21,13 @@ export default function WorkoutCard({
     <Link href={`/workouts/${workout.id}`} asChild>
       <Pressable className="flex flex-row items-center justify-between px-container py-5">
         <View className="flex flex-row gap-4 items-center">
-          <Image
+          {/* <Image
             src="https://v3apparel.com/cdn/shop/articles/Get_Fit_in_Just_10_Minutes_-_Full-Body_Workout_for_Busy_Women_-_V3_Apparel_seamless_workout_leggings_gym_tights_fitness_sports_bras_tank_tops_and_t_shirts.jpg?v=1679523333&width=2048"
             className=" h-[70px] w-[70px] rounded-2xl"
-          />
+          /> */}
+          <View className=" h-[70px] w-[70px] flex items-center justify-center rounded-2xl bg-slate-100">
+            <Text className="text-3xl">{workout.icon_emoji}</Text>
+          </View>
           <View className="flex flex-col gap-2">
             <View className="flex flex-col">
               <Text className="font-medium">{workout.name}</Text>

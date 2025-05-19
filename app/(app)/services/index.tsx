@@ -14,27 +14,6 @@ import ServiceCard from "./components/service-card";
 import ServiceWorkoutSkeleton from "@/components/skeletons/service-workout-skeleton";
 import { Link } from "expo-router";
 
-const services: tServicesResponse[] = [
-  {
-    id: "1",
-    name: "Ramena",
-    description: "Opis sluzby",
-    duration: 600,
-    is_active: true,
-    price: 100,
-    icon_emoji: "🏋️",
-  },
-  {
-    id: "2",
-    name: "Nohy",
-    icon_emoji: "🏋️",
-    description: "Opis sluzby",
-    duration: 3600,
-    is_active: true,
-    price: 100,
-  },
-];
-
 export default function ServicesPage() {
   const insets = useSafeAreaInsets();
 

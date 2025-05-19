@@ -39,7 +39,7 @@ const Input = React.forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
 
     // ------- Styles ----------
     const baseWrapperClasses =
-      "flex-row items-center rounded-xl border bg-background web:w-full transition-[color,box-shadow] outline-none lg:text-sm";
+      "flex-row rounded-xl border bg-background web:w-full transition-[color,box-shadow] outline-none lg:text-sm";
 
     // Spacing inside input (accounts for inset label)
     const insetPadding = cn("pt-1 pb-1 px-3", label && "pt-4");
@@ -67,7 +67,7 @@ const Input = React.forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
           </Text>
         )}
 
-        {startContent && <View className="mr-2">{startContent}</View>}
+        {startContent && <View className="mr-2 mt-2.5">{startContent}</View>}
 
         <TextInput
           ref={ref}
@@ -84,7 +84,7 @@ const Input = React.forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
         />
 
         {endContent && (
-          <Text className="ml-2 text-slate-600">{endContent}</Text>
+          <Text className="ml-2 mt-2.5 text-slate-600">{endContent}</Text>
         )}
       </View>
     );

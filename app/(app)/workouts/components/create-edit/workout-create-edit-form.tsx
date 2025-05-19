@@ -1,5 +1,5 @@
 import { Form } from "@/components/ui/form";
-import { servicesProvider } from "@/dbProvider";
+import { servicesProvider, workoutsProvider } from "@/dbProvider";
 import { useWorkoutStore } from "@/stores/workout";
 import { tServiceResponse, tServicesResponse } from "@/ts/services";
 import { sNewServiceSchema } from "@/zod/services";
@@ -19,7 +19,9 @@ import TextCard from "@/components/cards/text-card";
 import { Button } from "@/components/ui/button";
 import WorkoutStepsCard from "../steps-card";
 import { tWorkoutResponse } from "@/ts/workouts";
-import { sNewWorkoutSchema } from "@/zod/workouts";
+import RHFNativeSelect from "@/components/ui/form/rhf-native-select";
+import { difficultyTypesSelect } from "@/lib/selectData";
+import { sNewWorkout } from "@/zod/workouts";
 
 export default function WorkoutCreateEditForm({
   workout,
@@ -39,14 +41,15 @@ export default function WorkoutCreateEditForm({
 
   const workoutSteps = useWorkoutStore((state) => state.steps);
   const setWorkoutSteps = useWorkoutStore((state) => state.updateSteps);
-
   const form = useForm({
     defaultValues: {
       name: workout?.name || "",
+      icon_emoji: workout?.icon_emoji || "🏋️",
       description: workout?.description || "",
+      difficulty: workout?.difficulty || "easy",
       steps: workout?.steps || [],
     },
-    resolver: zodResolver(sNewWorkoutSchema),
+    resolver: zodResolver(sNewWorkout),
   });
 
   const present = async () => await sheet.current?.present();
@@ -55,17 +58,17 @@ export default function WorkoutCreateEditForm({
   const handleSubmit = async (data: any) => {
     try {
       if (workoutSteps.length) {
-        data.options = workoutSteps;
+        data.steps = workoutSteps;
       }
 
-      const id = isEditing ? workout?.id : await servicesProvider.create(data);
+      const id = isEditing ? workout?.id : await workoutsProvider.create(data);
 
       if (isEditing) {
-        await servicesProvider.update(id, data);
+        await workoutsProvider.update(id, data);
       }
 
       // Update the list of goals
-      queryClient.setQueryData<tServicesResponse[]>(["services"], (prev = []) =>
+      queryClient.setQueryData<tServicesResponse[]>(["workouts"], (prev = []) =>
         isEditing
           ? prev.map((g) => (g.id === id ? { ...g, ...data } : g))
           : [...prev, { ...data, id }]
@@ -73,10 +76,13 @@ export default function WorkoutCreateEditForm({
 
       // If we edited, also update the single-goal cache
       if (isEditing) {
-        queryClient.setQueryData<tServiceResponse>(["workout", id], (prev) => ({
-          ...prev!,
-          ...data,
-        }));
+        queryClient.setQueryData<tServiceResponse>(
+          ["workouts", id],
+          (prev) => ({
+            ...prev!,
+            ...data,
+          })
+        );
       }
 
       toast.success(isEditing ? "Cíl upraven" : "Cíl vytvořen");
@@ -114,7 +120,17 @@ export default function WorkoutCreateEditForm({
       >
         <ScrollView contentContainerClassName="flex-1" className="flex-1 ">
           {/* Icon and title */}
-          <CreateEditHeaderFormCard name="name" placeholder="Název služby" />
+          <CreateEditHeaderFormCard
+            name="name"
+            placeholder="Název služby"
+            subHeader={
+              <RHFNativeSelect
+                name="difficulty"
+                label="Obtížnost"
+                options={difficultyTypesSelect("cs")}
+              />
+            }
+          />
           <CardSeparator className="py-4" />
 
           {/* Description */}

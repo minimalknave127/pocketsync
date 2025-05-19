@@ -1,6 +1,6 @@
 import axios from "./axios";
 import { tNewServiceEntry } from "./ts/services";
-import { tNewWorkoutEntry } from "./ts/workouts";
+import { tNewWorkoutEntry, tNewWorkoutStepEntry } from "./ts/workouts";
 
 export const authProvider = {
   signUp: async (data: any) => {
@@ -106,6 +106,15 @@ export const workoutsProvider = {
     const res = await axios.post("/workouts", data);
     return res.data?.created_id;
   },
+
+  createStep: async (
+    workout_id: string,
+    data: tNewWorkoutStepEntry
+  ): Promise<number> => {
+    const res = await axios.post(`/workouts/${workout_id}/steps`, data);
+    return res.data?.created_id;
+  },
+
   update: async (id: string, data: any) => {
     const res = await axios.patch(`/workouts/${id}`, data);
     return res;

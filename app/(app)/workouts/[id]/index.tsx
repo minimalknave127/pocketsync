@@ -11,19 +11,20 @@ import ExercisesCard from "../components/steps-card";
 import { useQuery } from "@tanstack/react-query";
 import { workoutsProvider } from "@/dbProvider";
 import { useLocalSearchParams } from "expo-router";
+import { tWorkoutResponse } from "@/ts/workouts";
 
 export default function WorkoutDetails() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams();
 
-  const { data, isLoading } = useQuery({
-    queryFn: async () => {
-      const res = await workoutsProvider.getWorkout(id as string);
-      return res?.data?.data;
-    },
-    queryKey: ["workouts", id],
-  });
-
+  const { data, isLoading }: { data: tWorkoutResponse; isLoading: boolean } =
+    useQuery({
+      queryFn: async () => {
+        const res = await workoutsProvider.getWorkout(id as string);
+        return res?.data?.data;
+      },
+      queryKey: ["workouts", id],
+    });
   return (
     <Screen>
       <View
@@ -40,13 +41,18 @@ export default function WorkoutDetails() {
             {/* Header */}
             <DetailsHeader
               loading={isLoading}
-              title={"Kondice - zeny"}
-              avatar="f"
-              avatarFallback="K"
+              title={data?.name}
+              icon={data?.icon_emoji}
               descripton={
                 <>
-                  <TextIconPill icon={Clock10} text={"60 minut"} />
-                  <TextIconPill icon={<DumbbellHand />} text={"20 cviků"} />
+                  <TextIconPill
+                    icon={Clock10}
+                    text={`${data?.total_duration} minut`}
+                  />
+                  <TextIconPill
+                    icon={<DumbbellHand />}
+                    text={`${data?.steps.length} cviků`}
+                  />
                 </>
               }
               separator
@@ -55,13 +61,17 @@ export default function WorkoutDetails() {
             {/* Description */}
             <TextCard
               loading={isLoading}
-              title="Popis"
-              description="Kondiční trénink zaměření na zeny"
+              title={"Popis"}
+              description={data?.description}
               separator
             />
 
             {/* Excercises */}
-            <ExercisesCard loading={isLoading} />
+            <ExercisesCard
+              loading={isLoading}
+              steps={data?.steps}
+              id={id as string}
+            />
           </View>
         </ScrollView>
         <View className="px-container py-4">

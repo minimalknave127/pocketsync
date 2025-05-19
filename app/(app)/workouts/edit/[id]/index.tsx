@@ -1,4 +1,4 @@
-import { servicesProvider } from "@/dbProvider";
+import { servicesProvider, workoutsProvider } from "@/dbProvider";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
@@ -9,9 +9,9 @@ export default function CreateEditService() {
   const isEditing = id !== "new";
 
   const { data: workout, isLoading } = useQuery({
-    queryKey: ["workout", id],
+    queryKey: ["workouts", id],
     queryFn: async () => {
-      const res = await servicesProvider.getService(id as string);
+      const res = await workoutsProvider.getWorkout(id as string);
       return res.data?.data;
     },
     enabled: isEditing,

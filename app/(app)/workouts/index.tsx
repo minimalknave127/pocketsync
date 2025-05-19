@@ -15,35 +15,17 @@ import { useQuery } from "@tanstack/react-query";
 import { workoutsProvider } from "@/dbProvider";
 import { Link } from "expo-router";
 
-const workouts: tWorkoutsResponse[] = [
-  {
-    id: "1",
-    name: "Ramena",
-    difficulty: "easy",
-    total_duration: 600,
-    description: "Horni koncetiny",
-    steps_count: 7,
-  },
-  {
-    id: "2",
-    name: "Nohy",
-    difficulty: "medium",
-    total_duration: 3600,
-    description: "Kondicni trenink noh",
-    steps_count: 10,
-  },
-];
-
 export default function WorkoutsPage() {
   const insets = useSafeAreaInsets();
 
-  const { data, isLoading } = useQuery({
-    queryFn: async () => {
-      const res = await workoutsProvider.getWorkouts();
-      return res?.data?.data;
-    },
-    queryKey: ["workouts"],
-  });
+  const { data, isLoading }: { data: tWorkoutsResponse[]; isLoading: boolean } =
+    useQuery({
+      queryFn: async () => {
+        const res = await workoutsProvider.getWorkouts();
+        return res?.data?.data;
+      },
+      queryKey: ["workouts"],
+    });
 
   return (
     <>
@@ -68,7 +50,7 @@ export default function WorkoutsPage() {
             estimatedItemSize={80}
             className="flex-1"
             contentContainerClassName="mt-6"
-            data={workouts}
+            data={data}
             ItemSeparatorComponent={() => <View className="h-0.5 bg-muted" />}
             renderItem={({ item }) => <WorkoutCard workout={item} />}
           />

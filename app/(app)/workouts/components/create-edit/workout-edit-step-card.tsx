@@ -4,7 +4,9 @@ import { Text } from "@/components/ui/text";
 import { tWorkoutStepStoreOption } from "@/stores/workout";
 import { Clock10, Grip, Pencil } from "lucide-react-native";
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, Platform, TouchableOpacity, View } from "react-native";
+import { useIsActive, useReorderableDrag } from "react-native-reorderable-list";
+import * as Haptics from "expo-haptics";
 
 const width = Dimensions.get("screen").width;
 
@@ -17,34 +19,48 @@ export default function WorkoutEditStepCard({
   onPress?: () => void;
   step: tWorkoutStepStoreOption;
 }) {
+  const drag = useReorderableDrag();
+  const isActive = useIsActive();
+
   const subTitle =
-    step.duration && step.exerciseType === "time"
+    step.duration && step.exercise_type === "time"
       ? `${step.duration} s`
-      : `${step.repeatCount} x ${step.exerciseDuration}`;
+      : `${step.repeat_count} x ${step.exercise_duration}`;
 
   return (
-    <View className="gap-4 ">
+    <TouchableOpacity
+      className="px-container flex-row items-center justify-between gap-4 active:bg-muted/20"
+      activeOpacity={1}
+      onLongPress={() => {
+        drag();
+        if (Platform.OS === "ios") {
+          Haptics.selectionAsync();
+        }
+      }}
+      disabled={isActive}
+    >
       {loading ? (
         loaders.steps
       ) : (
         <>
           {step.type === "rest" ? (
-            <PauseCard duration={step.duration} />
+            <PauseCard duration={step.duration} onPress={onPress} />
           ) : (
             <ExerciseCard
               index={1}
               title={step.name}
               subTitle={subTitle}
               description={step.description}
+              onPress={onPress}
             />
           )}
         </>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 
-const ExerciseCard = ({ title, subTitle, description, index }) => {
+const ExerciseCard = ({ title, subTitle, description, index, onPress }) => {
   return (
     <View className="flex flex-row justify-between items-center gap-2 px-container py-4">
       <View className="flex flex-row gap-3 items-center flex-1">
@@ -69,13 +85,14 @@ const ExerciseCard = ({ title, subTitle, description, index }) => {
         icon={Pencil}
         width={18}
         height={18}
+        onPress={onPress}
         className="text-muted-foreground"
       />
     </View>
   );
 };
 
-const PauseCard = ({ duration }: { duration: number }) => {
+const PauseCard = ({ duration, onPress }: { duration: number; onPress }) => {
   return (
     <View className="flex-row items-center justify-between gap-2 px-container py-4">
       <View className="flex-row items-center gap-2 flex-1">
@@ -94,7 +111,7 @@ const PauseCard = ({ duration }: { duration: number }) => {
           />
           <View className="flex-row">
             <Text className="text-xs text-[#1E293B]/70">Přestávka</Text>
-            <Text className="text-xs text-[#1E293B]"> {duration} min</Text>
+            <Text className="text-xs text-[#1E293B]"> {duration} s</Text>
           </View>
         </View>
         <View className="flex-1 h-[1px] bg-input" />
@@ -102,6 +119,7 @@ const PauseCard = ({ duration }: { duration: number }) => {
       <Icon
         icon={Pencil}
         width={18}
+        onPress={onPress}
         height={18}
         className="text-muted-foreground"
       />

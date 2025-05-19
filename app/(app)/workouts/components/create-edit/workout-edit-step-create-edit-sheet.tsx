@@ -6,8 +6,8 @@ import RHFNativeSelect from "@/components/ui/form/rhf-native-select";
 import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
-import { tServStoreOption, useServiceStore } from "@/stores/service";
 import { tWorkoutStepStoreOption, useWorkoutStore } from "@/stores/workout";
+import { tNewWorkoutStepEntry } from "@/ts/workouts";
 import { sWorkoutStepSchema } from "@/zod/workouts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { XIcon } from "lucide-react-native";
@@ -19,21 +19,27 @@ export default function WorkoutEditStepCreateEditSheet({
   isOpen,
   setIsOpen,
   selected,
+  handleSubmit,
 }: {
   isOpen: boolean;
   setIsOpen: (val: boolean) => void;
   selected?: tWorkoutStepStoreOption;
+  handleSubmit?: (data: tNewWorkoutStepEntry) => Promise<void>;
 }) {
   return (
     <Modal visible={isOpen} animationType="slide">
       <Screen className="flex-col justify-between">
-        <FormComponent selected={selected} setIsOpen={setIsOpen} />
+        <FormComponent
+          handleSubmit={handleSubmit}
+          selected={selected}
+          setIsOpen={setIsOpen}
+        />
       </Screen>
     </Modal>
   );
 }
 
-const FormComponent = ({ selected, setIsOpen }) => {
+const FormComponent = ({ handleSubmit, selected, setIsOpen }) => {
   const [isTimeStep, setIsTimeStep] = useState<boolean>(false);
 
   const setWorkoutSteps = useWorkoutStore((state) => state.updateSteps);
@@ -43,20 +49,29 @@ const FormComponent = ({ selected, setIsOpen }) => {
     defaultValues: {
       name: selected?.name || "",
       description: selected?.description || "",
-      exerciseType: selected?.exerciseType || "time",
-      exerciseDuration: selected?.exerciseDuration || 10,
+      exercise_type: selected?.exercise_type || "time",
+      exercise_duration: selected?.exercise_duration || 10,
       duration: selected?.duration || 1,
-      repeatCount: selected?.repeatCount || 1,
-      restTime: selected?.restTime || 30,
+      repeat_count: selected?.repeat_count || 1,
+      rest_time: selected?.rest_time || 30,
     },
     resolver: zodResolver(sWorkoutStepSchema),
   });
 
-  const onSubmit = (data: any) => {
-    if (data.exerciseType === "time") {
+  const onSubmit = async (data: any) => {
+    data["type"] = "exercise";
+
+    if (data.exercise_type === "time") {
       data.duration =
-        data.exerciseDuration * data.repeatCount +
-        data.restTime * (data.repeatCount - 1);
+        data.exercise_duration * data.repeat_count +
+        data.rest_time * (data.repeat_count - 1);
+    }
+
+    if (handleSubmit) {
+      await handleSubmit(data);
+      form.reset({ duration: 10 });
+      setIsOpen(false);
+      return;
     }
 
     if (!selected) {
@@ -77,10 +92,10 @@ const FormComponent = ({ selected, setIsOpen }) => {
   };
 
   useEffect(() => {
-    if (form.watch("exerciseType") === "time") {
+    if (form.watch("exercise_type") === "time") {
       setIsTimeStep(true);
     } else setIsTimeStep(false);
-  }, [form.watch("exerciseType")]);
+  }, [form.watch("exercise_type")]);
 
   return (
     <>
@@ -124,7 +139,7 @@ const FormComponent = ({ selected, setIsOpen }) => {
             />
 
             <RHFNativeSelect
-              name="exerciseType"
+              name="exercise_type"
               label="Typ cviku"
               options={[
                 { value: "count", label: "Na počet opakování" },
@@ -133,14 +148,14 @@ const FormComponent = ({ selected, setIsOpen }) => {
             />
 
             <RHFInput
-              name="repeatCount"
+              name="repeat_count"
               label="Počet opakování"
               className="mt-4"
             />
 
             {/* {isTimeStep ? ( */}
             <RHFInput
-              name="exerciseDuration"
+              name="exercise_duration"
               keyboardType="numeric"
               label={isTimeStep ? "Délka opakování" : "Počet cviků"}
               endContent={isTimeStep ? "sekund" : undefined}
@@ -164,7 +179,7 @@ const FormComponent = ({ selected, setIsOpen }) => {
             )}
 
             <RHFInput
-              name="restTime"
+              name="rest_time"
               label="Odpočinek"
               endContent="sekund"
               className="mt-4"

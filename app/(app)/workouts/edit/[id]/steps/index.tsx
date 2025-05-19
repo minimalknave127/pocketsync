@@ -3,8 +3,8 @@ import { Screen } from "@/components/ui/screen";
 import { Text } from "@/components/ui/text";
 import { tServStoreOption } from "@/stores/service";
 import { tWorkoutStepStoreOption, useWorkoutStore } from "@/stores/workout";
-import { useRouter } from "expo-router";
-import React, { useRef, useState } from "react";
+import { useNavigation, useRouter } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
 import { ListRenderItemInfo, View } from "react-native";
 import ReorderableList, {
   ReorderableListReorderEvent,
@@ -20,6 +20,7 @@ export default function ServiceOptionEditCreate() {
   const [selected, setSelected] = useState<tWorkoutStepStoreOption | null>(
     null
   );
+  const navigation = useNavigation();
   const workoutSteps = useWorkoutStore((state) => state.steps);
   const setWorkoutSteps = useWorkoutStore((state) => state.updateSteps);
 
@@ -28,13 +29,19 @@ export default function ServiceOptionEditCreate() {
   const sheetRef = useRef<TrueSheet>(null);
 
   const present = async () => await sheetRef.current?.present();
-  const dismiss = async () => await sheetRef.current?.dismiss();
+  const dismiss = async () => {
+    await sheetRef.current?.dismiss();
+    setSelected(null);
+  };
 
   const handleEdit = (id: number) => {
     const step = workoutSteps.find((step) => step.id === id);
     if (step) {
       setSelected(step);
-      setIsOpen(true);
+
+      if (step.type === "rest") {
+        present();
+      } else setIsOpen(true);
     }
   };
 
@@ -73,6 +80,16 @@ export default function ServiceOptionEditCreate() {
     );
   };
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button variant="secondary" size="sm" onPress={() => router.back()}>
+          Uložit
+        </Button>
+      ),
+    });
+  }, []);
+
   return (
     <>
       {/* Pause/Rest create - edit */}
@@ -90,9 +107,6 @@ export default function ServiceOptionEditCreate() {
       <Screen className="flex-col justify-between">
         <View className="flex flex-row justify-between items-center px-container">
           <Text className="text-2xl font-semibold capitalize">Cviky</Text>
-          <Button variant="secondary" size="sm" onPress={() => router.back()}>
-            Uložit
-          </Button>
         </View>
         <ReorderableList
           data={workoutSteps}
