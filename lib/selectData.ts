@@ -43,3 +43,28 @@ export const wokrkoutStepTypesData: Record<
   rest: { en: "Rest", cs: "Pauza" },
   exercise: { en: "Exercise", cs: "Cvik" },
 };
+
+export const reservationRepeatSelect = (lang: "cs" | "en") => {
+  const selectData = [
+    { value: "none", label: { en: "None", cs: "Žádný" } },
+    { value: "daily", label: { en: "Daily", cs: "Denní" } },
+    { value: "per day", label: { en: "Per day", cs: "Přes den" } },
+    { value: "3 days", label: { en: "Per 3 days", cs: "Přes káždé 3 dny" } },
+    { value: "1 week", label: { en: "Weekly", cs: "Týdenní" } },
+    { value: "2 week", label: { en: "Per 2 weeks", cs: "Přes káždé 2 tydny" } },
+  ];
+
+  return selectData.map((item) => ({
+    value: item.value,
+    label: item.label[lang],
+  }));
+};
+
+export const reservationRepeatData = {
+  none: { en: "None", cs: "Žádný" },
+  daily: { en: "Daily", cs: "Denní" },
+  "per day": { en: "Per day", cs: "Přes den" },
+  "3 days": { en: "Per 3 days", cs: "Přes káždé 3 dny" },
+  "1 week": { en: "Weekly", cs: "Týdenní" },
+  "2 week": { en: "Per 2 weeks", cs: "Přes káždé 2 tydny" },
+};

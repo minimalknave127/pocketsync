@@ -30,7 +30,7 @@ export const clientProvider = {
     const params = new URLSearchParams();
     if (offset) params.append("offset", offset.toString());
     if (search) params.append("search", search);
-    const res = await axios.get(`/trainers/customers${params.toString()}`);
+    const res = await axios.get(`/trainers/customers?${params.toString()}`);
     return res;
   },
   getClient: async (id: string) => {
@@ -67,8 +67,11 @@ export const goalsProvider = {
 };
 
 export const servicesProvider = {
-  getServices: async () => {
-    const res = await axios.get("/services");
+  getServices: async (offset?: number, search?: string) => {
+    const params = new URLSearchParams();
+    if (offset) params.append("offset", offset.toString());
+    if (search) params.append("search", search);
+    const res = await axios.get(`/services?${params.toString()}`);
     return res;
   },
   getService: async (id: string, only_options: boolean = false) => {
@@ -125,6 +128,39 @@ export const workoutsProvider = {
   },
   delete: async (id: string) => {
     const res = await axios.delete(`/workouts/${id}`);
+    return res;
+  },
+};
+
+export const reservationsProvider = {
+  getReservations: async (
+    offset?: number,
+    from?: Date,
+    to?: Date,
+    service_id?: string,
+    only_active: boolean = false
+  ) => {
+    const params = new URLSearchParams();
+
+    if (from) params.append("from", from.toISOString());
+    if (to) params.append("to", to.toISOString());
+    if (service_id) params.append("service_id", service_id);
+    if (offset) params.append("offset", offset.toString());
+    if (only_active) params.append("only_active", only_active.toString());
+
+    const res = await axios.get("/reservations/trainers");
+    return res;
+  },
+  create: async (data: any) => {
+    const res = await axios.post("/reservations/trainers", data);
+    return res;
+  },
+  update: async (id: string, data: any) => {
+    const res = await axios.patch(`/reservations/trainers/${id}`, data);
+    return res;
+  },
+  delete: async (id: string) => {
+    const res = await axios.delete(`/reservations/trainers/${id}`);
     return res;
   },
 };

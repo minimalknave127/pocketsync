@@ -8,10 +8,12 @@ export default function FastActions() {
   const actions = [
     {
       name: "Nový klient",
+      href: "/clients/new",
       icon: Man3D,
     },
     {
       name: "Nová rezervace",
+      href: "/reservations/new/page1",
       icon: Dumbell3D,
     },
   ];
@@ -23,7 +25,7 @@ export default function FastActions() {
         horizontal
         contentContainerClassName="px-container gap-2.5 mt-4"
         renderItem={({ item }) => (
-          <Link asChild href="/clients/new">
+          <Link asChild href={item.href}>
             <Pressable className="items-center">
               <View className="w-20 h-20 bg-slate-100 dark:bg-muted justify-center items-center rounded-xl">
                 {<item.icon />}

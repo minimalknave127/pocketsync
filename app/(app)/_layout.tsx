@@ -136,6 +136,12 @@ export default function AppLayout() {
             headerRight: () => <BackBtn isModal />,
           })}
         />
+        <Stack.Screen
+          name="reservations/new"
+          options={({ route }) => ({
+            headerShown: false,
+          })}
+        />
       </Stack>
     </SafeAreaProvider>
   );
